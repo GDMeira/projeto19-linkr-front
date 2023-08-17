@@ -4,6 +4,7 @@ import SignInPage from "./pages/SignInPage";
 import SignUpPage from "./pages/SignUpPage";
 import UserProvider from "./Contex/UserContext";
 import TokenProvider from "./Contex/TokenContext";
+import HashtagPage from "./pages/HashtagPage/HashtagPage";
 function App() {
   return (
     <PagesContainer>
@@ -13,7 +14,7 @@ function App() {
         <Routes>
         <Route path="/" element={<SignInPage />} />
         <Route path="/cadastro" element={<SignUpPage />} /> 
-          
+        <Route path="/hashtag/:hashtag" element={<HashtagPage />} /> 
          
         
         </Routes>
