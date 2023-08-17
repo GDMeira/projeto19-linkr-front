@@ -6,7 +6,6 @@ import axios from "axios"
 import { useContext } from "react"
 import { TokenContext } from "../Contex/TokenContext"
 import { UserContext } from "../Contex/UserContext"
-import { API_URL } from "../routes/routes"
 
 
 
@@ -24,7 +23,7 @@ export default function SignInPage() {
       senha:senhaLogin
     }
       console.log(dadosLogin)
-      axios.post(`${API_URL}/signin`, dadosLogin)
+      axios.post("https://localhost:5001/signin", dadosLogin)
       .then(resposta => {
         
           const {nome, token, _id} = resposta.data

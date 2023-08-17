@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom"
 import styled from "styled-components"
 import axios from "axios"
 import MyWalletLogo from "../components/MyWalletLogo"
-import { API_URL } from "../routes/routes"
 
 export default function SignUpPage() {
   
@@ -25,7 +24,7 @@ export default function SignUpPage() {
       }
       if(password !== null && password !== ''){
         
-        axios.post(`${API_URL}/signup`, dadosCadastro)
+        axios.post("https://localhost:5001/signup", dadosCadastro)
         .then(() => navigate('/')) 
         .catch((error) => alert(error.response))
 
