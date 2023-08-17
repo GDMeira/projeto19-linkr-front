@@ -1,13 +1,14 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { styled } from "styled-components";
 import { API_URL, headersAuth } from "../../routes/routes";
 import { UserContext } from "../../Contex/UserContext";
+import axios from "axios";
 
 export default function HashtagPage() {
     const { user } = useContext(UserContext);
     const { hashtag } = useParams();
-    const [tweets, setTweets] = useState([]);
+    const [tweets, setTweets] = useState(undefined);
 
     useEffect(() => {
         axios.get(`${API_URL}/hashtags/${hashtag}`, headersAuth(user.token))
@@ -83,6 +84,10 @@ const PostContainerSC = styled.div`
     height: 1500px;
     background-color: #350808;
     margin-right: 1.7vw;
+
+    @media (max-width: 768px) {
+        width: 100%;
+    }
 `;
 
 const TrendingContainerSC = styled.div`
@@ -91,4 +96,7 @@ const TrendingContainerSC = styled.div`
     width: 20.9vw;
     height: 406px;
     background-color: #0d0d51;
+    @media (max-width: 768px) {
+        width: 100%;
+    }
 `;
