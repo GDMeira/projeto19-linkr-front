@@ -5,6 +5,7 @@ const GlobalStyle = createGlobalStyle`
         font-family: 'Raleway';
         font-style: normal;
         font-weight: 400;
+        box-sizing: border-box;
     }
     button {
         outline: none;
