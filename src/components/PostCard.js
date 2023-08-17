@@ -11,24 +11,26 @@ export default function PostCard({post}) {
     const {id, userId, link, title, linkDescription, image, postDescription, userImage, userName} = post
     const navigate = useNavigate();
 
-
-
     function details(id) {
         navigate(`/detalhes/${id}`);
 
     }
 
+    function goToUrl(link) {
+        
+    }
+
 return (
-    <ListServiceContainer key={id} onClick={() => details(id)}>
+    <ListServiceContainer key={id} data-test="post">
         <Left>
             <img src={userImage} alt="foto do criador" />
             {/* no futuro likes */}
         </Left>
         <Right>
-            <h1><strong>{userName}</strong></h1>
-            <h2>{postDescription}</h2>
-            <Linkr>
-                <Info>
+            <h1 data-test="username"><strong>{userName}</strong></h1>
+            <h2 data-test="description">{postDescription}</h2>
+            <Linkr  data-test="link">
+                <Info onClick={() => goToUrl()}>
                     <h3>{title}</h3>
                     <h4>{linkDescription}</h4>
                     <h5>{link}</h5>

@@ -1,16 +1,18 @@
 
 import { useState } from "react";
-import NavBar from "../../components/NavBar"
-import PostCard from "../../components/PostCard";
+import NavBar from "../components/NavBar"
+import PostCard from "../components/PostCard";
 import styled from "styled-components";
 
 export default function HomePage() {
+    const { auth, login, user, localUser } = useAuth();
     const [link, setLink] = useState('')
     const [description, setDescription] = useState('')
     const [allPosts, setAllPosts] = useState([[]])
 
+
     useEffect(() => {
-        if (auth && auth.token) {
+        if (!auth && !auth.token) {
           navigate("/");
         }
         const promise = getPosts(auth)
@@ -22,21 +24,15 @@ export default function HomePage() {
     function postLinkr(e) {
         e.preventDefault();
     
-        const user = {email, password};
+        const post = {email, password};
         
-        const promise = signIn(user);
+        const promise = newPost(link, description);
     
         promise.then( response => {
 
-        //getToken(response.data.token)     
-          console.log(response.data.user.rows[0])
-          console.log(response.data.token)
-        localUser(response.data.user.rows[0])
-        login(response.data.token);
-        // navegar para pagina de entrada
-        //home
 
-        navigate('/home');
+
+
         });
         promise.catch( err  => alert(err.response.data.message));
       }
@@ -46,27 +42,31 @@ export default function HomePage() {
         <TimelineContainer>
         <h1>Timeline</h1>
 
-            <PostContainer>
+            <PostContainer  data-test="publish-box">
                 <Left>
-                    <img></img>
+                    <img src={user.pictureUrl}></img>
                 </Left>
                 <Right>
                 <form onSubmit={postLinkr}>
                     What are you going to share today?
-                    <input placeholder="http://..." type="" value={link} onChange={(e) => setLink(e.target.value)}/>
-                    <input placeholder="Awesome article about #javascript" type="password" value={password} onChange={(e) => setPassword(e.target.value)}/>
-                    <button >Publish</button>
+                    <input placeholder="http://..." data-test="link" type="texy" value={link} onChange={(e) => setLink(e.target.value)}/>
+                    <input placeholder="Awesome article about #javascript" data-test="description" type="text" value={description} onChange={(e) => setDescription(e.target.value)}/>
+                    <button data-test="publish-btn">Publish</button>
                 </form>
                 </Right>
             </PostContainer>
             <LinksContainer>
                 {allPosts.map(post => (<PostCard key={post.id} post={post} />))}
-                
+                {allServices.length < 1 && <p data-test="message" >Ainda Não Existe serviço disponível</p> } 
             </LinksContainer>
         </TimelineContainer>
         </>
     )
 }
+const LinksContainer = styled.div`
+    width: 611px;
+
+`
 
 const Left = styled.div`
     padding:7px;
@@ -113,7 +113,8 @@ const Right = styled.div`
         font-weight: 600;
         color: #fff;
         cursor: pointer;
-        width: 100%;
+        width: 112px;
+        height: 31px;
         padding: 12px;
     }
 `
