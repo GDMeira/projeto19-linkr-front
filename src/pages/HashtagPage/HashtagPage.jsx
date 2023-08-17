@@ -4,6 +4,7 @@ import { styled } from "styled-components";
 import { API_URL, headersAuth } from "../../routes/routes";
 import { UserContext } from "../../Contex/UserContext";
 import axios from "axios";
+import Trending from "../../components/Trending";
 
 export default function HashtagPage() {
     const { user } = useContext(UserContext);
@@ -11,12 +12,13 @@ export default function HashtagPage() {
     const [tweets, setTweets] = useState(undefined);
 
     useEffect(() => {
-        axios.get(`${API_URL}/hashtags/${hashtag}`, headersAuth(user.token))
+        axios.get(`${API_URL}/hashtags/${hashtag}`, headersAuth(user?.token))
         .then((res) => {
             setTweets(res.data);
         })
         .catch((err) => {
-            alert(err.response.data.message);
+            console.log(err);
+            // alert(err.response.data);
         });
     }, [hashtag])
     
@@ -26,11 +28,13 @@ export default function HashtagPage() {
             <TitleSC># {hashtag}</TitleSC>
             <ContainerSC>
                 <PostContainerSC>
-                    Cards e cards
+                    {!tweets ? (
+                        <h1>Loading</h1>
+                    ) : (
+                        tweets.map((tweet, i) => <h1 key={i}>{tweet.postDescription}</h1>)
+                    )}
                 </PostContainerSC>
-                <TrendingContainerSC>
-                    asuhdaiusdhias
-                </TrendingContainerSC>
+                <Trending />
             </ContainerSC>
         </PageSC>
     )
@@ -52,6 +56,7 @@ const ContainerSC = styled.div`
     @media (max-width: 768px) {
         flex-direction: column;
         justify-content: flex-start;
+        align-items: center;
     }
 `;
 
@@ -68,10 +73,11 @@ const TitleSC = styled.h1`
     width: 65vw;
 
     @media (max-width: 768px) {
-        width: 100%;
+        width: 95vw;
         font-size: 33px;
         margin-top: 91px;
         margin-bottom: 19px;
+        margin-left: 17px;
     }
 `;
 
@@ -86,17 +92,7 @@ const PostContainerSC = styled.div`
     margin-right: 1.7vw;
 
     @media (max-width: 768px) {
-        width: 100%;
-    }
-`;
-
-const TrendingContainerSC = styled.div`
-    position: sticky;
-    top: 211px;
-    width: 20.9vw;
-    height: 406px;
-    background-color: #0d0d51;
-    @media (max-width: 768px) {
-        width: 100%;
+        width: 100vw;
+        margin-right: 0px;
     }
 `;
