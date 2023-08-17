@@ -1,10 +1,12 @@
 import { BrowserRouter,Routes,Route } from "react-router-dom";
 import { styled } from "styled-components";
-import SignInPage from "./pages/SignInPage";
-import SignUpPage from "./pages/SignUpPage";
+import SignUpPage from "./pages/SignUpPage/SignUpPage";
 import UserProvider from "./Contex/UserContext";
 import TokenProvider from "./Contex/TokenContext";
 import HashtagPage from "./pages/HashtagPage/HashtagPage";
+import HomePage from "./pages/HomePage/HomePage";
+import SignInPage from "./pages/SignInPage/SignInPage";
+
 function App() {
   return (
     <PagesContainer>
@@ -13,6 +15,7 @@ function App() {
       <UserProvider>
         <Routes>
         <Route path="/" element={<SignInPage />} />
+        <Route path ='/home' element={<HomePage/>}/>
         <Route path="/cadastro" element={<SignUpPage />} /> 
         <Route path="/hashtag/:hashtag" element={<HashtagPage />} /> 
          
