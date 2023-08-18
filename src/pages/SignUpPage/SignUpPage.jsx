@@ -21,7 +21,6 @@ export default function SignUpPage() {
         password,
         userName,
         pictureUrl 
-        
       }
       console.log(dadosCadastro)
       if(password !== null && password !== ''){
