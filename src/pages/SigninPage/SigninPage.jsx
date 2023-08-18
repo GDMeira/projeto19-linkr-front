@@ -3,39 +3,52 @@ import MyWalletLogo from "../../components/MyWalletLogo"
 import { Link, useNavigate } from "react-router-dom"
 import { useState } from "react"
 import axios from "axios"
-import { useContext } from "react"
-import { TokenContext } from "../../Contex/TokenContext"
-import { UserContext } from "../../Contex/UserContext"
+//import { useContext } from "react"
+//import { TokenContext } from "../../Contex/TokenContext"
+//import { UserContext } from "../../Contex/UserContext"
 import { API_URL } from "../../routes/routes"
+import useAuth from "../../hooks/useAuth"
 
 
 
 export default function SignInPage() {
-  
+  const { auth, login, localUser } = useAuth();
   const [emailLogin, setEmailLogin] = useState('')
   const [senhaLogin, setSenhaLogin] = useState('')
   const navigate = useNavigate()
-  const {setUser} = useContext(UserContext)
-  const {token} = useContext(TokenContext)
- function login(event){
-    event.preventDefault()
-    const dadosLogin ={
-      email:emailLogin,
-      senha:senhaLogin
-    }
-      console.log(dadosLogin)
+  //const {setUser} = useContext(UserContext)
+  //const {token} = useContext(TokenContext)
+//  function login(event){
+//     event.preventDefault()
+//     const dadosLogin ={
+//       email:emailLogin,
+//       senha:senhaLogin
+//     }
+
+      function signin (e) {
+      //console.log(dadosLogin)
+      const dadosLogin ={
+              email:emailLogin,
+              senha:senhaLogin
+            }
       axios.post(`${API_URL}/signin`, dadosLogin)
       .then(resposta => {
         
-          const {nome, token, _id} = resposta.data
-          setUser({nome,token, _id})
-          localStorage.setItem('user', JSON.stringify({nome, token,_id}))
+          //const {nome, token } = resposta.data
+          
+          localUser(resposta.data.user.rows[0])
+          login(resposta.data.token);
+          
+          
+          //setUser({nome,token})
+
+
+          //localStorage.setItem('user', JSON.stringify({nome, token}))
           navigate('/cadastro')
        
-       
-      }) 
+             }) 
       .catch((error) => {
-        if(!token){
+        if(!auth){
           alert(error.response)
           navigate('/')
         }else{
@@ -65,7 +78,7 @@ export default function SignInPage() {
         </LeftSideContainer>
 
         <RightSideContainer>
-          <form onSubmit={login}>
+          <form onSubmit={signin}>
             <MyWalletLogo />
             <input  placeholder="E-mail" type="email" value={emailLogin} onChange={e =>setEmailLogin(e.target.value)}/>
             <input  placeholder="Senha" required type="password" autoComplete="new-password" value={senhaLogin} onChange={e => setSenhaLogin(e.target.value)}/>

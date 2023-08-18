@@ -5,7 +5,7 @@ import UserProvider from "./Contex/UserContext";
 import TokenProvider from "./Contex/TokenContext";
 import HashtagPage from "./pages/HashtagPage/HashtagPage";
 import HomePage from "./pages/HomePage/HomePage";
-import SignInPage from "./pages/SignInPage/SignInPage";
+import SignInPage from "./pages/SigninPage/SigninPage";
 
 function App() {
   return (
