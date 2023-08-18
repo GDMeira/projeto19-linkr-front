@@ -2,9 +2,9 @@ import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { styled } from "styled-components";
 import { API_URL, headersAuth } from "../../routes/routes";
-import { UserContext } from "../../Contex/UserContext";
 import axios from "axios";
 import Trending from "../../components/Trending";
+import UserContext from "../../contexts/UserContext";
 
 export default function HashtagPage() {
     const { user } = useContext(UserContext);
@@ -20,7 +20,7 @@ export default function HashtagPage() {
             console.log(err);
             // alert(err.response.data);
         });
-    }, [hashtag])
+    }, [hashtag, user?.token])
     
 
     return (
