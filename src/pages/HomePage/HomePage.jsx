@@ -1,34 +1,71 @@
-//import { useContext, useEffect, useState } from "react";
+
 //import { useParams } from "react-router-dom";
 import { styled } from "styled-components";
-//import { API_URL, headersAuth } from "../../routes/routes";
+import { API_URL } from "../../routes/routes";
 //import { UserContext } from "../../Contex/UserContext";
-//import axios from "axios";
+import axios from "axios";
+import { useNavigate } from "react-router-dom"
 import { IonIcon } from '@ionic/react';
-import { chevronUpOutline } from 'ionicons/icons';
+import { chevronUpOutline,chevronDownOutline } from 'ionicons/icons';
+import {useState } from "react";
+
+
 
 export default function HomePage() {
-   
-    return (
     
-        <Header>
+    const [arrow, setArrow] = useState(false)
+    const navigate = useNavigate()
+    
+    function arrowChange(){
+        if(!arrow){
+            setArrow(true)
+        }else{
+            setArrow(false)
+        }
+    }
+
+    function logOut(){
+        axios.get(`${API_URL}/home`)
+      .then(navigate('/')
+       
+      ) 
+      .catch((error) => {
+        alert(error.response)
+        
+      })
+    }
+
+
+    return (
+        <Container>
+        
+        <HeaderUp>
             <Logo>
                 Linkr
             </Logo>
          
             <Picture>
-                <IonIcon icon={chevronUpOutline} style={{ fontSize: '24px', color: 'white', backgroundColor:'#151515' }} />
-                <img src="https://shorturl.at/lCS38" alt="pictureUrl" />
+                <IonIcon onClick={arrowChange} icon={arrow ? chevronUpOutline : chevronDownOutline} style={{ fontSize: '24px', color: 'white', backgroundColor:'#151515' }} />
+                <img src="https://shorturl.at/lCS38" alt="pictureUrl"/>
             </Picture>
             
-        </Header>
-       
+        </HeaderUp>
+
+            <HeaderDown onClick={logOut} style={{display:arrow ? 'flex' : 'none'}}>
+               <h3> Logout </h3>
+            </HeaderDown>
+        </Container>
+      
     
     )
 }
 
+const Container = styled.div`
+    display:flex;
+    flex-direction:column;
 
-const Header = styled.div`
+`
+const HeaderUp = styled.div`
     display: flex;
     position: fixed;
     top: 0;
@@ -67,3 +104,27 @@ const Picture = styled.div`
     margin-left: 15px;
     }
 `;
+
+const HeaderDown = styled.div`
+    //display: flex;
+    justify-content: center;
+    align-items:center;
+    position: fixed;
+    top: 72px;
+    right: 0;
+    z-index: 100;
+    justify-content:space-between; 
+    align-items: center;
+    width: 150px;
+    height: 47px;
+    background-color: #151515;
+    color: white;
+    border-bottom-left-radius: 40px 35px;
+    h3{
+        margin:auto;
+    }
+  
+
+`;
+
+//
