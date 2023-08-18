@@ -2,7 +2,6 @@ import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import styled from "styled-components"
 import axios from "axios"
-import MyWalletLogo from "../../components/MyWalletLogo"
 import { API_URL } from "../../routes/routes"
 
 export default function SignUpPage() {
@@ -55,7 +54,6 @@ export default function SignUpPage() {
         <RightSideContainer>
         <form onSubmit={enviarCadastro}>
             
-            <MyWalletLogo />
         
             <input placeholder="e-mail" type="email" value={email} onChange={e => setEmail(e.target.value)}/>
             <input placeholder="password" type="password" autoComplete="new-password" value={password} onChange={e => setPassword(e.target.value)}/>

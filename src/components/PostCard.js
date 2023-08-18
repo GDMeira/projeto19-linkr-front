@@ -134,13 +134,3 @@ const ListServiceContainer = styled.div`
     justify-content: flex-start;
 
 `
-
-
-
-
-
-
-
-
-
-
