@@ -1,5 +1,4 @@
 import styled from "styled-components"
-import MyWalletLogo from "../../components/MyWalletLogo"
 import { Link, useNavigate } from "react-router-dom"
 import { useState } from "react"
 import axios from "axios"
@@ -65,16 +64,19 @@ export default function SignInPage() {
         </LeftSideContainer>
 
         <RightSideContainer>
+         
+      
           <form onSubmit={login}>
-            <MyWalletLogo />
-            <input  placeholder="E-mail" type="email" value={emailLogin} onChange={e =>setEmailLogin(e.target.value)}/>
-            <input  placeholder="Senha" required type="password" autoComplete="new-password" value={senhaLogin} onChange={e => setSenhaLogin(e.target.value)}/>
-            <button>Log In</button>
-          </form>
+              
+              <input  placeholder="E-mail" type="email" value={emailLogin} onChange={e =>setEmailLogin(e.target.value)}/>
+              <input  placeholder="Senha" required type="password" autoComplete="new-password" value={senhaLogin} onChange={e => setSenhaLogin(e.target.value)}/>
+              <button>Log In</button>
+            </form>
 
-          <Link to={'/cadastro'}>
-            First time? Create an account! 
-          </Link>
+            <Link to={'/cadastro'}>
+              First time? Create an account! 
+            </Link>
+        
         </RightSideContainer>
     </Container>
   )
@@ -102,12 +104,13 @@ const ContainerLeft = styled.section`
     height: 40%;
     color:white;
     font-weight: 700;
-    line-height: 26px;
+    margin-bottom: 120px;
     
 
     div:nth-child(1){
         width: 500px;
         height: 70px;
+        margin-bottom: 100px;
     
     }
     div:nth-child(2){
@@ -126,14 +129,18 @@ const ContainerLeft = styled.section`
 `
 
 const RightSideContainer = styled.section`
-  width: 35%;
+  width: 30%;
   display: flex;
-  box-sizing: content-box;
-  margin: 20px;
+  box-sizing: border-box;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  form{
-    width: 80%;
+  margin: auto;
+  input{
+    width:80%
   }
+  button{
+    width:80%;
+  }
+  
 `

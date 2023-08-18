@@ -49,6 +49,7 @@ const Logo = styled.div`
     height: 54px;
     font-weight: 700;
     font-size: 50px;
+   
     padding-left: 15px;
     background-color: #151515
 `;
