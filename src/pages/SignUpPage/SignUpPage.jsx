@@ -2,7 +2,6 @@ import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import styled from "styled-components"
 import axios from "axios"
-import MyWalletLogo from "../../components/MyWalletLogo"
 import { API_URL } from "../../routes/routes"
 
 export default function SignUpPage() {
@@ -22,7 +21,7 @@ export default function SignUpPage() {
         userName,
         pictureUrl 
       }
-    
+      console.log(dadosCadastro)
       if(password !== null && password !== ''){
         
         axios.post(`${API_URL}/signup`, dadosCadastro)
@@ -54,7 +53,6 @@ export default function SignUpPage() {
         <RightSideContainer>
         <form onSubmit={enviarCadastro}>
             
-            <MyWalletLogo />
         
             <input placeholder="e-mail" type="email" value={email} onChange={e => setEmail(e.target.value)}/>
             <input placeholder="password" type="password" autoComplete="new-password" value={password} onChange={e => setPassword(e.target.value)}/>
@@ -97,12 +95,14 @@ const ContainerLeft = styled.section`
     height: 40%;
     color:white;
     font-weight: 700;
-    line-height: 26px;
+    margin-bottom: 120px;
+    
     
 
     div:nth-child(1){
         width: 500px;
         height: 70px;
+        margin-bottom: 100px;
     
     }
     div:nth-child(2){
@@ -120,15 +120,18 @@ const ContainerLeft = styled.section`
     }
 `
 const RightSideContainer = styled.section`
-  //height: 100vh;
-  width: 35%;
+  width: 30%;
   display: flex;
-  box-sizing: content-box;
-  margin: 20px;
+  box-sizing: border-box;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  form{
-    width: 80%;
+  margin: auto;
+  input{
+    width:80%
   }
+  button{
+    width:80%;
+  }
+  
 `
