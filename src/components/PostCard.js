@@ -1,39 +1,44 @@
 import styled from "styled-components";
 import React from "react";
+import PostText from "./PostText";
 
 
-export default function PostCard({post}) {
-    
-    const {id, link, title, linkDescription, image, postDescription, userImage, userName} = post
+export default function PostCard({ post }) {
+    const { id, url, linkTitle, linkDescription, linkImage, postDescription, pictureUrl, userName } = post
+    console.log(post)
 
-    function goToUrl(id) {
-        return  window.location.href = link;
+    function goToUrl(link) {
+        return window.location.href = link;
     }
 
-return (
-    <ListServiceContainer key={id} data-test="post">
-        <Left>
-            <img src={userImage} alt="foto do criador" />
-            {/* no futuro likes */}
-        </Left>
-        <Right>
-            <h1 data-test="username"><strong>{userName}</strong></h1>
-            <h2 data-test="description">{postDescription}</h2>
-            <Linkr  data-test="link">
-                <Info onClick={() => goToUrl(link)}>
-                    <h3>{title}</h3>
-                    <h4>{linkDescription}</h4>
-                    <h5>{link}</h5>
-                </Info>
-                <Image>
-                    <img src={image} alt="link" />
-                </Image>
-            </Linkr>
-        </Right>
-    </ListServiceContainer>
-)}
+    return (
+        <ListServiceContainer data-test="post">
+            <Left>
+                <img src={pictureUrl} alt="foto do criador" />
+                {/* no futuro likes */}
+            </Left>
+            <Right>
+                <h1 data-test="username"><strong>{userName}</strong></h1>
+                <PostText>{postDescription}</PostText>
+                <Linkr data-test="link">
+                    <Info onClick={() => goToUrl(url)}>
+                        <h3>{linkTitle}</h3>
+                        <h4>{linkDescription}</h4>
+                        <h5>{url}</h5>
+                    </Info>
+                    <img src={linkImage} alt="link" />
+                </Linkr>
+            </Right>
+        </ListServiceContainer>
+    )
+}
 
 const Info = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 20px;
 `
 
 const Image = styled.div`
@@ -42,18 +47,30 @@ const Image = styled.div`
 `
 
 const Left = styled.div`
-    padding:7px;
-    width: 50px;
+    margin: 0 30px;
+    padding-top: 20px;
+    width: 3.5vw;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+    justify-content: flex-start;
+
     img {
-        width: 50px;
-        height: 50px;
-        border-radius: 26.5px;
+        width: 3.5vw;
+        height: 3.5vw;
+        border-radius: 50%;
     }
 `
 
 const Right = styled.div`
-    width: 503px;
-    height: 276px;
+    width: 37vw;
+    height: 25vh;
+    margin: 2vh 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     h1{
         color: #FFFFFF;
         font-family: Lato;
@@ -76,10 +93,12 @@ const Right = styled.div`
 
 
 const Linkr = styled.div`
-    width: 503px;
-    height: 155px;
+    width: 33vw;
+    height: 16vh;
     border: 1px solid #4D4D4D;
     border-radius: 16px;
+    display: flex;
+    justify-content: space-between;
 
     h3{
         font-family: Lato;
@@ -109,26 +128,23 @@ const Linkr = styled.div`
         color: #CECECE;
     }
     img {
-        height: 155px;
-        width: 155px;
+        height: 16vh;
+        border-radius: 0 16px 16px 0;
     }
 `
 
 const ListServiceContainer = styled.div`
-    width: 611px;
-    height: 276px;
+    width: 100%;
+    height: 27vh;
     top: 470px;
     left: 241px;
     border: 1px;
 
     display: flex;
-    flex-direction:column;
+    align-items: center;
+    justify-content: flex-start;
     background: #171717;
     border-radius: 15px;
     margin-top: 5px;
     margin-bottom: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-
 `

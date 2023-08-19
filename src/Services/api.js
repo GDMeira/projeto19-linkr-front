@@ -17,9 +17,9 @@ export function getPosts(token) {
 export function newPost(body, token) {
     const config = createConfig(token);
     
-    const {link, description} = body
+    const {link, postDescription} = body
 
-    const promise = axios.post(`${BASE_URL}/home`,{link, description}, config)
+    const promise = axios.post(`${BASE_URL}/home`,{link, postDescription}, config)
 
     return promise
 }

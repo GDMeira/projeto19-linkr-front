@@ -5,6 +5,8 @@ import { API_URL, headersAuth } from "../../routes/routes";
 import axios from "axios";
 import Trending from "../../components/Trending";
 import UserContext from "../../contexts/UserContext";
+import NavBar from "../../components/NavBar";
+import PostCard from "../../components/PostCard";
 
 export default function HashtagPage() {
     const { user } = useContext(UserContext);
@@ -12,31 +14,35 @@ export default function HashtagPage() {
     const [tweets, setTweets] = useState(undefined);
 
     useEffect(() => {
-        axios.get(`${API_URL}/hashtags/${hashtag}`, headersAuth(user?.token))
-        .then((res) => {
-            setTweets(res.data);
-        })
-        .catch((err) => {
-            console.log(err);
-            // alert(err.response.data);
-        });
+        axios.get(`${API_URL}/hashtags/${hashtag}`, headersAuth(user.token))
+            .then((res) => {
+                console.log(res.data);
+                setTweets(res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+                // alert(err.response.data);
+            });
     }, [hashtag, user?.token])
-    
+
 
     return (
-        <PageSC>
-            <TitleSC># {hashtag}</TitleSC>
-            <ContainerSC>
-                <PostContainerSC>
-                    {!tweets ? (
-                        <h1>Loading</h1>
-                    ) : (
-                        tweets.map((tweet, i) => <h1 key={i}>{tweet.postDescription}</h1>)
-                    )}
-                </PostContainerSC>
-                <Trending />
-            </ContainerSC>
-        </PageSC>
+        <>
+            <NavBar />
+            <PageSC>
+                <TitleSC># {hashtag}</TitleSC>
+                <ContainerSC>
+                    <PostContainerSC>
+                        {!tweets ? (
+                            <h1>Loading</h1>
+                        ) : (
+                            tweets.map((tweet, i) => <PostCard key={i} post={tweet}>{tweet.postDescription} </PostCard>)
+                        )}
+                    </PostContainerSC>
+                    <Trending />
+                </ContainerSC>
+            </PageSC>
+        </>
     )
 }
 
@@ -87,8 +93,6 @@ const PostContainerSC = styled.div`
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    height: 1500px;
-    background-color: #350808;
     margin-right: 1.7vw;
 
     @media (max-width: 768px) {
