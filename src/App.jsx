@@ -2,10 +2,10 @@ import { BrowserRouter,Routes,Route } from "react-router-dom";
 import { styled } from "styled-components";
 import HashtagPage from "./pages/HashtagPage/HashtagPage";
 import HomePage from "./pages/HomePage/HomePage";
-import SignInPage from "./pages/SignInPage/SigninPage";
 import SignUpPage from "./pages/SignUpPage/SignUpPage";
 import { useState } from "react";
 import UserContext from "./contexts/UserContext";
+import SignInPage from "./pages/SigninPage/SigninPage";
 
 function App() {
   const [user, setUser] = useState(undefined);
