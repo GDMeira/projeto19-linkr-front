@@ -3,92 +3,66 @@ import MyWalletLogo from "../../components/MyWalletLogo"
 import { Link, useNavigate } from "react-router-dom"
 import { useState } from "react"
 import axios from "axios"
-//import { useContext } from "react"
-//import { TokenContext } from "../../Contex/TokenContext"
-//import { UserContext } from "../../Contex/UserContext"
+import { useContext } from "react"
 import { API_URL } from "../../routes/routes"
-import useAuth from "../../hooks/useAuth"
-
-
+import UserContext from "../../contexts/UserContext"
 
 export default function SignInPage() {
-  const { auth, login, localUser } = useAuth();
+
   const [emailLogin, setEmailLogin] = useState('')
   const [senhaLogin, setSenhaLogin] = useState('')
   const navigate = useNavigate()
-  //const {setUser} = useContext(UserContext)
-  //const {token} = useContext(TokenContext)
-//  function login(event){
-//     event.preventDefault()
-//     const dadosLogin ={
-//       email:emailLogin,
-//       senha:senhaLogin
-//     }
+  const { setUser } = useContext(UserContext)
 
-      function signin (e) {
-      //console.log(dadosLogin)
-      const dadosLogin ={
-              email:emailLogin,
-              senha:senhaLogin
-            }
-      axios.post(`${API_URL}/signin`, dadosLogin)
+  function login(event) {
+    event.preventDefault()
+    const dadosLogin = {
+      email: emailLogin,
+      password: senhaLogin
+    }
+
+    axios.post(`${API_URL}/signin`, dadosLogin)
       .then(resposta => {
-        
-          //const {nome, token } = resposta.data
-          
-          localUser(resposta.data.user.rows[0])
-          login(resposta.data.token);
-          
-          
-          //setUser({nome,token})
-
-
-          //localStorage.setItem('user', JSON.stringify({nome, token}))
-          navigate('/cadastro')
-       
-             }) 
-      .catch((error) => {
-        if(!auth){
-          alert(error.response)
-          navigate('/')
-        }else{
-          alert(error.response)
-        }
-        
+        console.log(resposta)
+        const { userName, token, image } = resposta.data
+        setUser({ userName, token, image })
+        localStorage.setItem('user', JSON.stringify({ userName, token, image }))
+        navigate('/home')
       })
-    
-   
+      .catch((error) => {
+        console.error(error)
+        alert(error.response.data)
+      })
+  }
 
-}
-  
-  
+
   return (
-    
+
     <Container>
-        
-        <LeftSideContainer>
-            <ContainerLeft>
-                <div>
-                    <h1>Linkr</h1>
-                </div>
-                <div>
-                <h3>save, share and discover the best links on the web</h3>
-                </div>
-            </ContainerLeft>
-        </LeftSideContainer>
 
-        <RightSideContainer>
-          <form onSubmit={signin}>
-            <MyWalletLogo />
-            <input  placeholder="E-mail" type="email" value={emailLogin} onChange={e =>setEmailLogin(e.target.value)}/>
-            <input  placeholder="Senha" required type="password" autoComplete="new-password" value={senhaLogin} onChange={e => setSenhaLogin(e.target.value)}/>
-            <button>Log In</button>
-          </form>
+      <LeftSideContainer>
+        <ContainerLeft>
+          <div>
+            <h1>Linkr</h1>
+          </div>
+          <div>
+            <h3>save, share and discover the best links on the web</h3>
+          </div>
+        </ContainerLeft>
+      </LeftSideContainer>
 
-          <Link to={'/cadastro'}>
-            First time? Create an account! 
-          </Link>
-        </RightSideContainer>
+      <RightSideContainer>
+        <form onSubmit={login}>
+          <MyWalletLogo />
+          <input placeholder="E-mail" type="email" value={emailLogin} autoComplete="email" onChange={e => setEmailLogin(e.target.value)} />
+          <input placeholder="Senha" required type="password" autoComplete="password" value={senhaLogin} onChange={e => setSenhaLogin(e.target.value)} />
+          <button>Log In</button>
+        </form>
+
+        <Link to={'/cadastro'}>
+          First time? Create an account!
+        </Link>
+      </RightSideContainer>
     </Container>
   )
 }
@@ -96,7 +70,7 @@ const Container = styled.div`
     display:flex;
     height: 100vh;
     width:100vw;
-`   
+`
 const LeftSideContainer = styled.section`
     display:flex;
     justify-content: center;

@@ -1,50 +1,52 @@
 
-import { useState } from "react";
-import NavBar from "../components/NavBar"
-import PostCard from "../components/PostCard";
+import { useContext, useEffect, useState } from "react";
+import NavBar from "../../components/NavBar"
+import PostCard from "../../components/PostCard";
 import styled from "styled-components";
+import UserContext from "../../contexts/UserContext";
+import { getPosts, newPost } from "../../Services/api";
 
 export default function HomePage() {
-    const { auth, login, user, localUser } = useAuth();
+    const  user  = useContext(UserContext)
+    console.log(user)
+    const userdata = user.user
+    console.log(userdata)
+    
     const [link, setLink] = useState('')
     const [description, setDescription] = useState('')
     const [allPosts, setAllPosts] = useState([[]])
 
 
     useEffect(() => {
-        if (!auth && !auth.token) {
-          navigate("/");
-        }
-        const promise = getPosts(auth)
-        promise.then( (answer) => setAllPosts(answer.data))
+        console.log(user)
+        const promise = getPosts(userdata.token)
+        promise.then( (answer) => {
+            console.log(answer.data)
+            setAllPosts(answer.data)})
         promise.catch(error => console.log(error.response.data))
-    }, []);
+    }, [userdata.token, allPosts]);
 
 
     function postLinkr(e) {
         e.preventDefault();
-    
-        const post = {email, password};
         
         const promise = newPost(link, description);
     
         promise.then( response => {
-
-
-
-
+            
         });
         promise.catch( err  => alert(err.response.data.message));
       }
 
     return (
         <>
+        <NavBar />
         <TimelineContainer>
         <h1>Timeline</h1>
 
             <PostContainer  data-test="publish-box">
                 <Left>
-                    <img src={user.pictureUrl}></img>
+                    <img src={userdata.image} alt='user'></img>
                 </Left>
                 <Right>
                 <form onSubmit={postLinkr}>
@@ -57,7 +59,7 @@ export default function HomePage() {
             </PostContainer>
             <LinksContainer>
                 {allPosts.map(post => (<PostCard key={post.id} post={post} />))}
-                {allServices.length < 1 && <p data-test="message" >Ainda Não Existe serviço disponível</p> } 
+                {allPosts.length < 1 && <p data-test="message" >Ainda Não Existe serviço disponível</p> } 
             </LinksContainer>
         </TimelineContainer>
         </>

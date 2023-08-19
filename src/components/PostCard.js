@@ -1,23 +1,13 @@
 import styled from "styled-components";
-import axios from "axios";
-import { useState } from "react";
-import { useEffect } from "react";
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import useAuth from "../hooks/useAuth";
+
 
 export default function PostCard({post}) {
-    const { auth, login, user, localUser } = useAuth();
-    const {id, userId, link, title, linkDescription, image, postDescription, userImage, userName} = post
-    const navigate = useNavigate();
+    
+    const {id, link, title, linkDescription, image, postDescription, userImage, userName} = post
 
-    function details(id) {
-        navigate(`/detalhes/${id}`);
-
-    }
-
-    function goToUrl(link) {
-        
+    function goToUrl(id) {
+        return  window.location.href = link;
     }
 
 return (
@@ -30,7 +20,7 @@ return (
             <h1 data-test="username"><strong>{userName}</strong></h1>
             <h2 data-test="description">{postDescription}</h2>
             <Linkr  data-test="link">
-                <Info onClick={() => goToUrl()}>
+                <Info onClick={() => goToUrl(link)}>
                     <h3>{title}</h3>
                     <h4>{linkDescription}</h4>
                     <h5>{link}</h5>
@@ -42,6 +32,14 @@ return (
         </Right>
     </ListServiceContainer>
 )}
+
+const Info = styled.div`
+`
+
+const Image = styled.div`
+    height: 155px;
+    width: 155px;
+`
 
 const Left = styled.div`
     padding:7px;

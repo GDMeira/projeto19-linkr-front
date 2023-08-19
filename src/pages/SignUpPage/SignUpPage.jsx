@@ -21,7 +21,6 @@ export default function SignUpPage() {
         password,
         userName,
         pictureUrl 
-        
       }
     
       if(password !== null && password !== ''){
