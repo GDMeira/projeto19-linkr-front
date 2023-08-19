@@ -1,8 +1,7 @@
-
-//import { useParams } from "react-router-dom";
+import { useContext } from "react"
 import { styled } from "styled-components";
 import { API_URL } from "../../routes/routes";
-//import { UserContext } from "../../Contex/UserContext";
+import UserContext from "../../contexts/UserContext"
 import axios from "axios";
 import { useNavigate } from "react-router-dom"
 import { IonIcon } from '@ionic/react';
@@ -15,6 +14,7 @@ export default function HomePage() {
     
     const [arrow, setArrow] = useState(false)
     const navigate = useNavigate()
+    const {user, setUser} = useContext(UserContext)
     
     function arrowChange(){
         if(!arrow){
@@ -25,12 +25,25 @@ export default function HomePage() {
     }
 
     function logOut(){
-        axios.get(`${API_URL}/home`)
-      .then(navigate('/')
+        const config = {
+            headers: {
+              "Authorization": `Bearer ${user.token}`,
+            }
+          }
+        axios.get(`${API_URL}/logout`,config)
+      .then(resposta =>{
+       
+        if(resposta){
+            setUser('')
+            localStorage.clear();
+            navigate('/')
+        }
+        
+      }
        
       ) 
       .catch((error) => {
-        alert(error.response)
+        alert(error.response.message)
         
       })
     }

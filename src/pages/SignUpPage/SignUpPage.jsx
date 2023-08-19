@@ -11,26 +11,39 @@ export default function SignUpPage() {
   const [password,setPassword] = useState('')
   const [userName, setUserName] = useState('')
   const [pictureUrl,setPictureUrl] = useState('')
+  const [btn, setBtn] = useState(false)
   const navigate = useNavigate()
   function enviarCadastro(event){
     event.preventDefault();
-   
+      setBtn(true)// O botao de SignUp fica desabilitado
       let dadosCadastro = {
         email,
         password,
         userName,
         pictureUrl 
       }
-      console.log(dadosCadastro)
-      if(password !== null && password !== ''){
+     
+      
+      if(password !== null && password !== '' && email !== null && email !== '' && userName !== null && userName !== ''){
         
         axios.post(`${API_URL}/signup`, dadosCadastro)
-        .then(() => navigate('/')) 
-        .catch((error) => alert(error.response))
+        .then((resposta) =>{
+          if(resposta){
+            
+            navigate('/')
+          }
+
+          }) 
+        .catch((error) =>{
+          setBtn(false)
+          alert(error.response)
+        })
+        
 
       }else{
+        setBtn(false)
         navigate('/cadastro')
-        alert('As senhas nao sao iguais') 
+        alert('Complete todos os dados') 
       }
   }
 
@@ -58,7 +71,7 @@ export default function SignUpPage() {
             <input placeholder="password" type="password" autoComplete="new-password" value={password} onChange={e => setPassword(e.target.value)}/>
             <input placeholder="username" type="text"  value={userName} onChange={e => setUserName(e.target.value)}/>
             <input placeholder="pictureUrl" type="text" value={pictureUrl} onChange={e => setPictureUrl(e.target.value)}/>
-            <button data-test='sign-up-submit'>Sign Up</button>
+            <Mybutton disabled={btn} style={{opacity: btn ? '.5' : '1'}}>Sign Up</Mybutton>
     
         </form>
 
@@ -134,4 +147,8 @@ const RightSideContainer = styled.section`
     width:80%;
   }
   
+`
+
+const Mybutton = styled.button`
+
 `

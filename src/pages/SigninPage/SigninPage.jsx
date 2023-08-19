@@ -10,29 +10,37 @@ export default function SignInPage() {
 
   const [emailLogin, setEmailLogin] = useState('')
   const [senhaLogin, setSenhaLogin] = useState('')
+  const [btn, setBtn] = useState(false)
   const navigate = useNavigate()
   const { setUser } = useContext(UserContext)
 
   function login(event) {
     event.preventDefault()
+    setBtn(true)// O botao de SignUp fica desabilitado
     const dadosLogin = {
       email: emailLogin,
       password: senhaLogin
     }
+    if(senhaLogin !== null && senhaLogin !== '' && emailLogin !== null && emailLogin !== ''){
 
-    axios.post(`${API_URL}/signin`, dadosLogin)
-      .then(resposta => {
-        console.log(resposta)
-        const { userName, token, image } = resposta.data
-        setUser({ userName, token, image })
-        localStorage.setItem('user', JSON.stringify({ userName, token, image }))
-        navigate('/home')
-      })
-      .catch((error) => {
-        console.error(error)
-        alert(error.response.data)
-      })
-  }
+        axios.post(`${API_URL}/signin`, dadosLogin)
+          .then(resposta => {
+            
+            const { userName, token, image } = resposta.data
+            setUser({ userName, token, image })
+            localStorage.setItem('user', JSON.stringify({ userName, token, image }))
+            navigate('/home')
+          })
+          .catch((error) => {
+            //console.error(error.response.data)
+            setBtn(false)
+            alert(error.response.message)
+          })
+      }else{
+        setBtn(false)
+        alert('Complete os dados ou se inscreva') 
+      }
+    }
 
 
   return (
@@ -55,7 +63,7 @@ export default function SignInPage() {
           
           <input placeholder="E-mail" type="email" value={emailLogin} autoComplete="email" onChange={e => setEmailLogin(e.target.value)} />
           <input placeholder="Senha" required type="password" autoComplete="password" value={senhaLogin} onChange={e => setSenhaLogin(e.target.value)} />
-          <button>Log In</button>
+          <Mybutton disabled={btn} style={{opacity: btn ? '.5' : '1'}}>Log In</Mybutton>
         </form>
 
           <Link to={'/cadastro'}>
@@ -127,4 +135,7 @@ const RightSideContainer = styled.section`
     width:80%;
   }
   
+`
+const Mybutton = styled.button`
+
 `
