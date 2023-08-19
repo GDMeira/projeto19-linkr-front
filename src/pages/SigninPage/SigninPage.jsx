@@ -1,5 +1,4 @@
 import styled from "styled-components"
-import MyWalletLogo from "../../components/MyWalletLogo"
 import { Link, useNavigate } from "react-router-dom"
 import { useState } from "react"
 import axios from "axios"
@@ -11,29 +10,37 @@ export default function SignInPage() {
 
   const [emailLogin, setEmailLogin] = useState('')
   const [senhaLogin, setSenhaLogin] = useState('')
+  const [btn, setBtn] = useState(false)
   const navigate = useNavigate()
   const { setUser } = useContext(UserContext)
 
   function login(event) {
     event.preventDefault()
+    setBtn(true)// O botao de SignUp fica desabilitado
     const dadosLogin = {
       email: emailLogin,
       password: senhaLogin
     }
+    if(senhaLogin !== null && senhaLogin !== '' && emailLogin !== null && emailLogin !== ''){
 
-    axios.post(`${API_URL}/signin`, dadosLogin)
-      .then(resposta => {
-        console.log(resposta)
-        const { userName, token, image } = resposta.data
-        setUser({ userName, token, image })
-        localStorage.setItem('user', JSON.stringify({ userName, token, image }))
-        navigate('/home')
-      })
-      .catch((error) => {
-        console.error(error)
-        alert(error.response.data)
-      })
-  }
+        axios.post(`${API_URL}/signin`, dadosLogin)
+          .then(resposta => {
+            
+            const { userName, token, image } = resposta.data
+            setUser({ userName, token, image })
+            localStorage.setItem('user', JSON.stringify({ userName, token, image }))
+            navigate('/home')
+          })
+          .catch((error) => {
+            //console.error(error.response.data)
+            setBtn(false)
+            alert(error.response.message)
+          })
+      }else{
+        setBtn(false)
+        alert('Complete os dados ou se inscreva') 
+      }
+    }
 
 
   return (
@@ -53,10 +60,10 @@ export default function SignInPage() {
 
       <RightSideContainer>
         <form onSubmit={login}>
-          <MyWalletLogo />
+          
           <input placeholder="E-mail" type="email" value={emailLogin} autoComplete="email" onChange={e => setEmailLogin(e.target.value)} />
           <input placeholder="Senha" required type="password" autoComplete="password" value={senhaLogin} onChange={e => setSenhaLogin(e.target.value)} />
-          <button>Log In</button>
+          <Mybutton disabled={btn} style={{opacity: btn ? '.5' : '1'}}>Log In</Mybutton>
         </form>
 
         <Link to={'/cadastro'}>
@@ -89,12 +96,13 @@ const ContainerLeft = styled.section`
     height: 40%;
     color:white;
     font-weight: 700;
-    line-height: 26px;
+    margin-bottom: 120px;
     
 
     div:nth-child(1){
         width: 500px;
         height: 70px;
+        margin-bottom: 100px;
     
     }
     div:nth-child(2){
@@ -113,14 +121,21 @@ const ContainerLeft = styled.section`
 `
 
 const RightSideContainer = styled.section`
-  width: 35%;
+  width: 30%;
   display: flex;
-  box-sizing: content-box;
-  margin: 20px;
+  box-sizing: border-box;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  form{
-    width: 80%;
+  margin: auto;
+  input{
+    width:80%
   }
+  button{
+    width:80%;
+  }
+  
+`
+const Mybutton = styled.button`
+
 `

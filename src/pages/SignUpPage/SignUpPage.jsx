@@ -2,7 +2,6 @@ import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import styled from "styled-components"
 import axios from "axios"
-import MyWalletLogo from "../../components/MyWalletLogo"
 import { API_URL } from "../../routes/routes"
 
 export default function SignUpPage() {
@@ -12,26 +11,39 @@ export default function SignUpPage() {
   const [password,setPassword] = useState('')
   const [userName, setUserName] = useState('')
   const [pictureUrl,setPictureUrl] = useState('')
+  const [btn, setBtn] = useState(false)
   const navigate = useNavigate()
   function enviarCadastro(event){
     event.preventDefault();
-   
+      setBtn(true)// O botao de SignUp fica desabilitado
       let dadosCadastro = {
         email,
         password,
         userName,
         pictureUrl 
       }
-    
-      if(password !== null && password !== ''){
+     
+      
+      if(password !== null && password !== '' && email !== null && email !== '' && userName !== null && userName !== ''){
         
         axios.post(`${API_URL}/signup`, dadosCadastro)
-        .then(() => navigate('/')) 
-        .catch((error) => alert(error.response))
+        .then((resposta) =>{
+          if(resposta){
+            
+            navigate('/')
+          }
+
+          }) 
+        .catch((error) =>{
+          setBtn(false)
+          alert(error.response)
+        })
+        
 
       }else{
+        setBtn(false)
         navigate('/cadastro')
-        alert('As senhas nao sao iguais') 
+        alert('Complete todos os dados') 
       }
   }
 
@@ -54,13 +66,12 @@ export default function SignUpPage() {
         <RightSideContainer>
         <form onSubmit={enviarCadastro}>
             
-            <MyWalletLogo />
         
             <input placeholder="e-mail" type="email" value={email} onChange={e => setEmail(e.target.value)}/>
             <input placeholder="password" type="password" autoComplete="new-password" value={password} onChange={e => setPassword(e.target.value)}/>
             <input placeholder="username" type="text"  value={userName} onChange={e => setUserName(e.target.value)}/>
             <input placeholder="pictureUrl" type="text" value={pictureUrl} onChange={e => setPictureUrl(e.target.value)}/>
-            <button data-test='sign-up-submit'>Sign Up</button>
+            <Mybutton disabled={btn} style={{opacity: btn ? '.5' : '1'}}>Sign Up</Mybutton>
     
         </form>
 
@@ -97,12 +108,14 @@ const ContainerLeft = styled.section`
     height: 40%;
     color:white;
     font-weight: 700;
-    line-height: 26px;
+    margin-bottom: 120px;
+    
     
 
     div:nth-child(1){
         width: 500px;
         height: 70px;
+        margin-bottom: 100px;
     
     }
     div:nth-child(2){
@@ -120,15 +133,22 @@ const ContainerLeft = styled.section`
     }
 `
 const RightSideContainer = styled.section`
-  //height: 100vh;
-  width: 35%;
+  width: 30%;
   display: flex;
-  box-sizing: content-box;
-  margin: 20px;
+  box-sizing: border-box;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  form{
-    width: 80%;
+  margin: auto;
+  input{
+    width:80%
   }
+  button{
+    width:80%;
+  }
+  
+`
+
+const Mybutton = styled.button`
+
 `
