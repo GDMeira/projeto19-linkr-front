@@ -1,15 +1,17 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { styled } from "styled-components";
-import { API_URL } from "../routes/routes";
+import { API_URL, headersAuth } from "../routes/routes";
 import { Link } from "react-router-dom";
+import UserContext from "../contexts/UserContext";
 
 export default function Trending() {
+    const { user } = useContext(UserContext);
     const [trending, setTrending] = useState(undefined);
 
     useEffect(() => {
         axios
-            .get(`${API_URL}/trending`)
+            .get(`${API_URL}/trending`, headersAuth(user.token))
             .then((res) => {
                 setTrending(res.data);
             })
@@ -56,7 +58,7 @@ const TrendingContainerSC = styled.div`
         height: 320px;
         display: flex;
         flex-direction: column;
-        justify-content: space-evenly;
+        justify-content: flex-start;
     }
 
     li {

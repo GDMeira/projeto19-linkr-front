@@ -1,43 +1,139 @@
-import styled from "styled-components"
-import { useContext } from "react";
-import { Link } from "react-router-dom";
-import useAuth from "../hooks/useAuth";
-import { useNavigate } from "react-router-dom";
-import React from "react";
+import { useContext } from "react"
+import { styled } from "styled-components";
+import { API_URL } from "../routes/routes";
+import UserContext from "../contexts/UserContext"
+import axios from "axios";
+import { useNavigate } from "react-router-dom"
+import { IonIcon } from '@ionic/react';
+import { chevronUpOutline, chevronDownOutline } from 'ionicons/icons';
+import { useState } from "react";
+
+
 
 export default function NavBar() {
-   const { auth, login, user, localUser } = useAuth();
+
+    const [arrow, setArrow] = useState(false)
+    const navigate = useNavigate()
+    const { user, setUser } = useContext(UserContext)
+
+    function arrowChange() {
+        if (!arrow) {
+            setArrow(true)
+        } else {
+            setArrow(false)
+        }
+    }
+
+    function logOut() {
+        const config = {
+            headers: {
+                "Authorization": `Bearer ${user.token}`,
+            }
+        }
+        axios.get(`${API_URL}/logout`, config)
+            .then(resposta => {
+
+                if (resposta) {
+                    setUser('')
+                    localStorage.clear();
+                    navigate('/')
+                }
+
+            }
+
+            )
+            .catch((error) => {
+                alert(error.response.message)
+
+            })
+    }
+
+
     return (
-        <NavBarStyle>
-            <Link to='/home'>Linkr</Link>
-            <img src={user.image} alt="" />
-        </NavBarStyle>
+        <>
+
+            <HeaderUp>
+                <Logo onClick={() => navigate('/home')}>
+                    Linkr
+                </Logo>
+
+                <Picture>
+                    <IonIcon onClick={arrowChange} icon={arrow ? chevronUpOutline : chevronDownOutline} style={{ fontSize: '24px', color: 'white', backgroundColor: '#151515' }} />
+                    <img src={user.image} alt="pictureUrl" />
+                </Picture>
+
+            </HeaderUp>
+
+            <HeaderDown onClick={logOut} style={{ display: arrow ? 'flex' : 'none' }}>
+                <h3> Logout </h3>
+            </HeaderDown>
+        </>
+
+
     )
 }
 
-const NavBarStyle = styled.div`
-    width: 100%;
-    height: 50px;
-    background: #171717;
-;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
+const HeaderUp = styled.div`
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px;
-    position:fixed;
+    position: fixed;
     top: 0;
     left: 0;
-    z-index: 1;
-        span {
-            margin-left: 30px;
-            
-        }
+    z-index: 100;
+    justify-content:space-between; 
+    align-items: center;
+    width: 100%;
+    height: 72px;
+    background-color: #151515;
+    color: white;
+  
 
-        h1 {
-            font-family: 'Helvetica';
-            width: 35%;
-            font-size: 30px;
-            color: #FFFFFF;
-        }
-`
+`;
+
+const Logo = styled.div`
+    width: 108px;
+    height: 54px;
+    font-weight: 700;
+    font-size: 50px;
+    cursor: pointer;
+   
+    padding-left: 15px;
+    background-color: #151515
+`;
+
+const Picture = styled.div`
+    background-color: #151515;
+    padding-right: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    img{
+    width: 53px;
+    height: 53px;
+    border-radius: 50%;
+    margin-left: 15px;
+    }
+`;
+
+const HeaderDown = styled.div`
+    //display: flex;
+    justify-content: center;
+    align-items:center;
+    position: fixed;
+    top: 72px;
+    right: 0;
+    z-index: 100;
+    justify-content:space-between; 
+    align-items: center;
+    width: 150px;
+    height: 47px;
+    background-color: #151515;
+    color: white;
+    border-bottom-left-radius: 40px 35px;
+    h3{
+        margin:auto;
+    }
+  
+
+`;
+
+//
