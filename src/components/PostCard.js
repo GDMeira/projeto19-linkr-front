@@ -4,11 +4,14 @@ import PostText from "./PostText";
 
 
 export default function PostCard({ post }) {
-    const { id, url, linkTitle, linkDescription, linkImage, postDescription, pictureUrl, userName } = post
+    let { id, url, linkTitle, linkDescription, linkImage, postDescription, pictureUrl, userName } = post
+    
+    if(!linkImage) linkImage = "https://lightwidget.com/wp-content/uploads/localhost-file-not-found.jpg";
     console.log(post)
 
     function goToUrl(link) {
-        return window.location.href = link;
+        return window.open(link)
+        //return window.location.href = link;
     }
 
     return (
@@ -20,13 +23,13 @@ export default function PostCard({ post }) {
             <Right>
                 <h1 data-test="username"><strong>{userName}</strong></h1>
                 <PostText>{postDescription}</PostText>
-                <Linkr data-test="link">
-                    <Info onClick={() => goToUrl(url)}>
+                <Linkr data-test="link" onClick={() => goToUrl(url)}>
+                    <Info >
                         <h3>{linkTitle}</h3>
                         <h4>{linkDescription}</h4>
                         <h5>{url}</h5>
                     </Info>
-                    <img src={linkImage} alt="link" />
+                    <Image src={linkImage} alt="link" />
                 </Linkr>
             </Right>
         </ListServiceContainer>
@@ -41,7 +44,7 @@ const Info = styled.div`
     padding: 20px;
 `
 
-const Image = styled.div`
+const Image = styled.img`
     height: 155px;
     width: 155px;
 `
@@ -88,6 +91,11 @@ const Right = styled.div`
         letter-spacing: 0em;
         text-align: left;
         color: linear-gradient(0deg, #B7B7B7, #B7B7B7),linear-gradient(0deg, #FFFFFF, #FFFFFF);
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2; /* number of lines to show */
+        line-clamp: 2; 
+        -webkit-box-orient: vertical;
 }
 `
 
@@ -99,6 +107,7 @@ const Linkr = styled.div`
     border-radius: 16px;
     display: flex;
     justify-content: space-between;
+    cursor: pointer;
 
     h3{
         font-family: Lato;
@@ -108,6 +117,11 @@ const Linkr = styled.div`
         letter-spacing: 0em;
         text-align: left;
         color: #CECECE;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2; /* number of lines to show */
+        line-clamp: 2; 
+        -webkit-box-orient: vertical;
     }
     h4 {
         font-family: Lato;
@@ -117,6 +131,11 @@ const Linkr = styled.div`
         letter-spacing: 0em;
         text-align: left;
         color: #9B9595;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2; /* number of lines to show */
+        line-clamp: 2; 
+        -webkit-box-orient: vertical;
     }
     h5 {
         font-family: Lato;
@@ -126,6 +145,11 @@ const Linkr = styled.div`
         letter-spacing: 0em;
         text-align: left;
         color: #CECECE;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2; /* number of lines to show */
+        line-clamp: 2; 
+        -webkit-box-orient: vertical;
     }
     img {
         height: 16vh;
