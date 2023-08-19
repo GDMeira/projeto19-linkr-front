@@ -1,141 +1,135 @@
-import styled from "styled-components"
-import { Link, useNavigate } from "react-router-dom"
-import { useState } from "react"
-import axios from "axios"
-import { useContext } from "react"
-import { API_URL } from "../../routes/routes"
-import UserContext from "../../contexts/UserContext"
 
-export default function SignInPage() {
+import { useContext, useEffect, useState } from "react";
+import NavBar from "../../components/NavBar"
+import PostCard from "../../components/PostCard";
+import styled from "styled-components";
+import UserContext from "../../contexts/UserContext";
+import { getPosts, newPost } from "../../Services/api";
 
-  const [emailLogin, setEmailLogin] = useState('')
-  const [senhaLogin, setSenhaLogin] = useState('')
-  const [btn, setBtn] = useState(false)
-  const navigate = useNavigate()
-  const { setUser } = useContext(UserContext)
-
-  function login(event) {
-    event.preventDefault()
-    setBtn(true)// O botao de SignUp fica desabilitado
-    const dadosLogin = {
-      email: emailLogin,
-      password: senhaLogin
-    }
-    if(senhaLogin !== null && senhaLogin !== '' && emailLogin !== null && emailLogin !== ''){
-
-        axios.post(`${API_URL}/signin`, dadosLogin)
-          .then(resposta => {
-            
-            const { userName, token, image } = resposta.data
-            setUser({ userName, token, image })
-            localStorage.setItem('user', JSON.stringify({ userName, token, image }))
-            navigate('/home')
-          })
-          .catch((error) => {
-            //console.error(error.response.data)
-            setBtn(false)
-            alert(error.response.message)
-          })
-      }else{
-        setBtn(false)
-        alert('Complete os dados ou se inscreva') 
-      }
-    }
-
-
-  return (
-
-    <Container>
-
-      <LeftSideContainer>
-        <ContainerLeft>
-          <div>
-            <h1>Linkr</h1>
-          </div>
-          <div>
-            <h3>save, share and discover the best links on the web</h3>
-          </div>
-        </ContainerLeft>
-      </LeftSideContainer>
-
-      <RightSideContainer>
-        <form onSubmit={login}>
-          
-          <input placeholder="E-mail" type="email" value={emailLogin} autoComplete="email" onChange={e => setEmailLogin(e.target.value)} />
-          <input placeholder="Senha" required type="password" autoComplete="password" value={senhaLogin} onChange={e => setSenhaLogin(e.target.value)} />
-          <Mybutton disabled={btn} style={{opacity: btn ? '.5' : '1'}}>Log In</Mybutton>
-        </form>
-
-        <Link to={'/cadastro'}>
-          First time? Create an account!
-        </Link>
-      </RightSideContainer>
-    </Container>
-  )
-}
-const Container = styled.div`
-    display:flex;
-    height: 100vh;
-    width:100vw;
-`
-const LeftSideContainer = styled.section`
-    display:flex;
-    justify-content: center;
-    align-items: center;
-    //height:100vh;
-    width: 65%;
-    background-color: black; 
-
-`
-const ContainerLeft = styled.section`
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    flex-direction: column;
-    width: 80%;
-    height: 40%;
-    color:white;
-    font-weight: 700;
-    margin-bottom: 120px;
+export default function HomePage() {
+    const  user  = useContext(UserContext)
+    console.log(user)
+    const userdata = user.user
+    console.log(userdata)
     
+    const [link, setLink] = useState('')
+    const [description, setDescription] = useState('')
+    const [allPosts, setAllPosts] = useState([[]])
 
-    div:nth-child(1){
-        width: 500px;
-        height: 70px;
-        margin-bottom: 100px;
-    
-    }
-    div:nth-child(2){
-        width: 500px;
-        height: 117px;
-        line-height: 45px;
+
+    useEffect(() => {
+        console.log(user)
+        const promise = getPosts(userdata.token)
+        promise.then( (answer) => {
+            console.log(answer.data)
+            setAllPosts(answer.data)})
+        promise.catch(error => console.log(error.response.data))
+    }, [userdata.token, allPosts]);
+
+
+    function postLinkr(e) {
+        e.preventDefault();
         
-       
-    }
-    h1{
-           font-size: 106px;
-    }
-    h3{
-           font-size: 43px;
+        const promise = newPost(link, description);
+    
+        promise.then( response => {
+            
+        });
+        promise.catch( err  => alert(err.response.data.message));
+      }
+
+    return (
+        <>
+        <NavBar />
+        <TimelineContainer>
+        <h1>Timeline</h1>
+
+            <PostContainer  data-test="publish-box">
+                <Left>
+                    <img src={userdata.image} alt='user'></img>
+                </Left>
+                <Right>
+                <form onSubmit={postLinkr}>
+                    What are you going to share today?
+                    <input placeholder="http://..." data-test="link" type="texy" value={link} onChange={(e) => setLink(e.target.value)}/>
+                    <input placeholder="Awesome article about #javascript" data-test="description" type="text" value={description} onChange={(e) => setDescription(e.target.value)}/>
+                    <button data-test="publish-btn">Publish</button>
+                </form>
+                </Right>
+            </PostContainer>
+            <LinksContainer>
+                {allPosts.map(post => (<PostCard key={post.id} post={post} />))}
+                {allPosts.length < 1 && <p data-test="message" >Ainda Não Existe serviço disponível</p> } 
+            </LinksContainer>
+        </TimelineContainer>
+        </>
+    )
+}
+const LinksContainer = styled.div`
+    width: 611px;
+
+`
+
+const Left = styled.div`
+    padding:7px;
+    width: 50px;
+    img {
+        width: 50px;
+        height: 50px;
+        border-radius: 26.5px;
     }
 `
 
-const RightSideContainer = styled.section`
-  width: 30%;
-  display: flex;
-  box-sizing: border-box;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin: auto;
-  input{
-    width:80%
-  }
-  button{
-    width:80%;
-  }
-  
+const Right = styled.div`
+    width: 503px;
+    height: 209px;
+    input {
+        font-size: 20px;
+        width: calc(100% - 20px);
+        border-radius: 5px;
+        outline: none;
+        border: 1px solid #ccc;
+        padding: 15px;
+        margin: 1px;
+        :focus {
+            border: 2px solid #ffb6b6;
+            margin: 0px;
+        }
+    }
+    form {
+        display: flex;
+        flex-direction: column;
+        justify-content: left;
+        align-items: center;
+        gap: 5px;
+        width: 95%;
+        border-radius: 5px;
+    }
+    button {
+        align-self: right;
+        outline: none;
+        border: none;
+        border-radius: 5px;
+        background: #1877F2;
+        font-size: 20px;
+        font-weight: 600;
+        color: #fff;
+        cursor: pointer;
+        width: 112px;
+        height: 31px;
+        padding: 12px;
+    }
 `
-const Mybutton = styled.button`
 
+const PostContainer = styled.div`
+    background: #FFFFFF;
+    width: 611px;
+    height: 209px;
+    border-radius: 16px;
 `
+
+const TimelineContainer = styled.div`
+    Width: 611px;
+    text-align: left;
+`
+
