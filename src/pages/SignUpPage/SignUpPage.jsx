@@ -67,15 +67,15 @@ export default function SignUpPage() {
         <form onSubmit={enviarCadastro}>
             
         
-            <input placeholder="e-mail" type="email" value={email} onChange={e => setEmail(e.target.value)}/>
-            <input placeholder="password" type="password" autoComplete="new-password" value={password} onChange={e => setPassword(e.target.value)}/>
-            <input placeholder="username" type="text"  value={userName} onChange={e => setUserName(e.target.value)}/>
-            <input placeholder="pictureUrl" type="text" value={pictureUrl} onChange={e => setPictureUrl(e.target.value)}/>
-            <Mybutton disabled={btn} style={{opacity: btn ? '.5' : '1'}}>Sign Up</Mybutton>
+            <input data-test="email" placeholder="e-mail" type="email" value={email} onChange={e => setEmail(e.target.value)}/>
+            <input data-test="password" placeholder="password" type="password" autoComplete="new-password" value={password} onChange={e => setPassword(e.target.value)}/>
+            <input data-test="username" placeholder="username" type="text"  value={userName} onChange={e => setUserName(e.target.value)}/>
+            <input data-test="picture-url" placeholder="pictureUrl" type="text" value={pictureUrl} onChange={e => setPictureUrl(e.target.value)}/>
+            <Mybutton data-test="sign-up-btn" disabled={btn} style={{opacity: btn ? '.5' : '1'}}>Sign Up</Mybutton>
     
         </form>
 
-        <Link to={'/'}>
+        <Link to={'/'} data-test="login-link">
             Switch back to log in
         </Link>
         </RightSideContainer>

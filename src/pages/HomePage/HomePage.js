@@ -16,31 +16,31 @@ export default function HomePage() {
     const [allPosts, setAllPosts] = useState([[]])
     const [loading, setLoading] = useState(false)
 
-    // useEffect(() => {
-    //     const fetchData = () => {
-    //         getPosts(user.token)
-    //             .then(answer => {
-    //                 setAllPosts(answer.data);
-    //             })
-    //             .catch(error => alert("An error occured while trying to fetch the posts, please refresh the page"));
-    //     };
-
-    //     fetchData();
-
-    //     const intervalId = setInterval(fetchData, 10000);
-
-    //     return () => {
-    //         clearInterval(intervalId);
-    //     };
-    // });
-
     useEffect(() => {
-        getPosts(user.token)
-            .then(answer => {
-                setAllPosts(answer.data);
-            })
-            .catch(error => alert("An error occured while trying to fetch the posts, please refresh the page"));
+        const fetchData = () => {
+            getPosts(user.token)
+                .then(answer => {
+                    setAllPosts(answer.data);
+                })
+                .catch(error => alert("An error occured while trying to fetch the posts, please refresh the page"));
+        };
+
+        fetchData();
+
+        const intervalId = setInterval(fetchData, 10000);
+
+        return () => {
+            clearInterval(intervalId);
+        };
     });
+
+    // useEffect(() => {
+    //     getPosts(user.token)
+    //         .then(answer => {
+    //             setAllPosts(answer.data);
+    //         })
+    //         .catch(error => alert("An error occured while trying to fetch the posts, please refresh the page"));
+    // });
 
 
     function postLinkr(e) {

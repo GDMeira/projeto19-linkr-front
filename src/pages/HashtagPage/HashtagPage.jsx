@@ -47,7 +47,7 @@ export default function HashtagPage() {
         <>
             <NavBar />
             <PageSC>
-                <TitleSC># {hashtag}</TitleSC>
+                <TitleSC data-test="hashtag-title"># {hashtag}</TitleSC>
                 <ContainerSC>
                     <PostContainerSC>
                         {!tweets ? (

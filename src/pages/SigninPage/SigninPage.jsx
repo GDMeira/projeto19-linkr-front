@@ -61,12 +61,12 @@ export default function SignInPage() {
       <RightSideContainer>
         <form onSubmit={login}>
           
-          <input placeholder="E-mail" type="email" value={emailLogin} autoComplete="email" onChange={e => setEmailLogin(e.target.value)} />
-          <input placeholder="Senha" required type="password" autoComplete="password" value={senhaLogin} onChange={e => setSenhaLogin(e.target.value)} />
-          <Mybutton disabled={btn} style={{opacity: btn ? '.5' : '1'}}>Log In</Mybutton>
+          <input data-test="email" placeholder="E-mail" type="email" value={emailLogin} autoComplete="email" onChange={e => setEmailLogin(e.target.value)} />
+          <input data-test="password" placeholder="Senha" required type="password" autoComplete="password" value={senhaLogin} onChange={e => setSenhaLogin(e.target.value)} />
+          <Mybutton data-test="login-btn" disabled={btn} style={{opacity: btn ? '.5' : '1'}}>Log In</Mybutton>
         </form>
 
-          <Link to={'/cadastro'}>
+          <Link to={'/cadastro'} data-test="sign-up-link">
             First time? Create an account! 
           </Link>
         </RightSideContainer>
