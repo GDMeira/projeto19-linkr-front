@@ -23,7 +23,7 @@ export default function HashtagPage() {
                 console.log(err);
                 // alert(err.response.data);
             });
-    }, [hashtag, user?.token])
+    })
 
 
     return (

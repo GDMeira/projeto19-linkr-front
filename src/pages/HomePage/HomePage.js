@@ -14,7 +14,6 @@ export default function HomePage() {
     const [description, setDescription] = useState('')
     const [allPosts, setAllPosts] = useState([[]])
 
-
     useEffect(() => {
         const fetchData = () => {
             getPosts(user.token)
@@ -31,7 +30,7 @@ export default function HomePage() {
         return () => {
             clearInterval(intervalId);
         };
-    }, [user]);
+    });
 
 
     function postLinkr(e) {

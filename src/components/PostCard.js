@@ -1,11 +1,11 @@
 import styled from "styled-components";
 import React from "react";
 import PostText from "./PostText";
+import Likes from "./Likes";
 
 
 export default function PostCard({ post }) {
-    const { id, url, linkTitle, linkDescription, linkImage, postDescription, pictureUrl, userName } = post
-    console.log(post)
+    const { id, url, linkTitle, linkDescription, linkImage, postDescription, pictureUrl, userName, likers } = post;
 
     function goToUrl(link) {
         return window.location.href = link;
@@ -15,7 +15,7 @@ export default function PostCard({ post }) {
         <ListServiceContainer data-test="post">
             <Left>
                 <img src={pictureUrl} alt="foto do criador" />
-                {/* no futuro likes */}
+                <Likes likers={likers} postId={id}/>
             </Left>
             <Right>
                 <h1 data-test="username"><strong>{userName}</strong></h1>

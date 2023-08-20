@@ -2,10 +2,11 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { styled } from "styled-components";
 import { API_URL, headersAuth } from "../routes/routes";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import UserContext from "../contexts/UserContext";
 
 export default function Trending() {
+    const navigate = useNavigate();
     const { user } = useContext(UserContext);
     const [trending, setTrending] = useState(undefined);
 
@@ -18,7 +19,7 @@ export default function Trending() {
             .catch((err) => {
                 console.log(err);
             });
-    }, []);
+    });
 
     return (
         <TrendingContainerSC>
@@ -28,7 +29,7 @@ export default function Trending() {
                 <h1>Loading...</h1>
             ) : (
                 <ul>
-                    {trending.map(t => <li key={t.name}><Link to={`/hashtag/${t.name}`}># {t.name}</Link></li>)}
+                    {trending.map(t => <li key={t.name} onClick={() => navigate(`/hashtag/${t.name}`)}># {t.name}</li>)}
                 </ul>
             )}
         </TrendingContainerSC>
@@ -59,6 +60,7 @@ const TrendingContainerSC = styled.div`
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
+        gap: 10px;
     }
 
     li {
