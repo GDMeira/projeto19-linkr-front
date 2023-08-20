@@ -2,22 +2,41 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { styled } from "styled-components";
 import { API_URL, headersAuth } from "../routes/routes";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import UserContext from "../contexts/UserContext";
 
 export default function Trending() {
+    const navigate = useNavigate();
     const { user } = useContext(UserContext);
     const [trending, setTrending] = useState(undefined);
 
+    // useEffect(() => {
+    //     const fetchData = () => {
+    //         axios
+    //             .get(`${API_URL}/trending`, headersAuth(user.token))
+    //             .then((res) => {
+    //                 setTrending(res.data);
+    //             })
+    //             .catch((err) => {
+    //                 console.log(err);
+    //             });
+    //     }
+
+    //     fetchData();
+
+    //     const intervalId = setInterval(fetchData, 10000);
+    //     return () => clearInterval(intervalId)
+    // }, []);
+
     useEffect(() => {
-        axios
-            .get(`${API_URL}/trending`, headersAuth(user.token))
-            .then((res) => {
-                setTrending(res.data);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+            axios
+                .get(`${API_URL}/trending`, headersAuth(user.token))
+                .then((res) => {
+                    setTrending(res.data);
+                })
+                .catch((err) => {
+                    alert(err.response.data);
+                });
     }, []);
 
     return (
@@ -28,7 +47,7 @@ export default function Trending() {
                 <h1>Loading...</h1>
             ) : (
                 <ul>
-                    {trending.map(t => <li key={t.name}><Link to={`/hashtag/${t.name}`}># {t.name}</Link></li>)}
+                    {trending.map(t => <li key={t.name} onClick={() => navigate(`/hashtag/${t.name}`)}># {t.name}</li>)}
                 </ul>
             )}
         </TrendingContainerSC>
@@ -59,6 +78,7 @@ const TrendingContainerSC = styled.div`
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
+        gap: 10px;
     }
 
     li {
