@@ -6,6 +6,7 @@ import styled from "styled-components";
 import UserContext from "../../contexts/UserContext";
 import { getPosts, newPost } from "../../Services/api";
 import Trending from "../../components/Trending";
+import { ThreeDots } from "react-loader-spinner"
 
 export default function HomePage() {
     const { user } = useContext(UserContext)
@@ -13,6 +14,7 @@ export default function HomePage() {
     const [link, setLink] = useState('')
     const [description, setDescription] = useState('')
     const [allPosts, setAllPosts] = useState([[]])
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         const fetchData = () => {
@@ -20,7 +22,7 @@ export default function HomePage() {
                 .then(answer => {
                     setAllPosts(answer.data);
                 })
-                .catch(error => console.log(error.response.data));
+                .catch(error => alert("An error occured while trying to fetch the posts, please refresh the page"));
         };
 
         fetchData();
@@ -35,13 +37,15 @@ export default function HomePage() {
 
     function postLinkr(e) {
         e.preventDefault();
-
+        setLoading(true)
         const promise = newPost({link, postDescription: description}, user.token);
-
+        
         promise.then(response => {
-
+            setLink('')
+            setDescription('')
+            setLoading(false)
         });
-        promise.catch(err => alert(err.response.data));
+        promise.catch(err => alert("An error occured while trying to fetch the posts, please refresh the page"));
     }
 
     return (
@@ -64,7 +68,16 @@ export default function HomePage() {
                                 <form onSubmit={postLinkr}>
                                     <input placeholder="http://..." data-test="link" type="texy" value={link} onChange={(e) => setLink(e.target.value)} />
                                     <input placeholder="Awesome article about #javascript" data-test="description" type="text" value={description} onChange={(e) => setDescription(e.target.value)} />
-                                    <button data-test="publish-btn">Publish</button>
+                                    <button data-test="publish-btn" disabled={loading} type="submit" value="Submit">{!loading ? 'Publish' :   <ThreeDots
+                                            color="#FFFFFF"
+                                            height="30"
+                                            width="60"
+                                            ariaLabel="three-dots-loading"
+                                            wrapperStyle={{}}
+                                            wrapperClassName=""
+                                            visible={true}
+                                        />}   
+                                    </button>
                                 </form>
                             </Right>
                         </NewPostContainer>
@@ -100,12 +113,13 @@ const Right = styled.div`
     flex-direction: column;
     justify-content: space-between;
     h1 {
-        font-size: 30px;
-        color: #000;
+        font-size: 20px;
+        color: #707070;
         margin-left: 20px;
+        margin-bottom: 5px;
     }
     input {
-        font-size: 20px;
+        font-size: 15px;
         width: calc(100% - 20px);
         border-radius: 5px;
         outline: none;
@@ -136,7 +150,7 @@ const Right = styled.div`
         color: #fff;
         cursor: pointer;
         width: 112px;
-        height: 3vh;
+        height: 45px;
         padding: 12px;
     }
 `
@@ -144,10 +158,11 @@ const Right = styled.div`
 const NewPostContainer = styled.div`
     background: #FFFFFF;
     width: 100%;
-    height: 20vh;
+    height: 209px;
     border-radius: 16px;
     display: flex;
     justify-content: space-evenly;
+    margin-bottom: 15px;
 `
 const PageSC = styled.div`
     background: #333;
