@@ -16,30 +16,38 @@ export default function HomePage() {
     const [allPosts, setAllPosts] = useState([[]])
     const [loading, setLoading] = useState(false)
 
+    // useEffect(() => {
+    //     const fetchData = () => {
+    //         getPosts(user.token)
+    //             .then(answer => {
+    //                 setAllPosts(answer.data);
+    //             })
+    //             .catch(error => alert("An error occured while trying to fetch the posts, please refresh the page"));
+    //     };
+
+    //     fetchData();
+
+    //     const intervalId = setInterval(fetchData, 10000);
+
+    //     return () => {
+    //         clearInterval(intervalId);
+    //     };
+    // });
+
     useEffect(() => {
-        const fetchData = () => {
-            getPosts(user.token)
-                .then(answer => {
-                    setAllPosts(answer.data);
-                })
-                .catch(error => alert("An error occured while trying to fetch the posts, please refresh the page"));
-        };
-
-        fetchData();
-
-        const intervalId = setInterval(fetchData, 10000);
-
-        return () => {
-            clearInterval(intervalId);
-        };
+        getPosts(user.token)
+            .then(answer => {
+                setAllPosts(answer.data);
+            })
+            .catch(error => alert("An error occured while trying to fetch the posts, please refresh the page"));
     });
 
 
     function postLinkr(e) {
         e.preventDefault();
         setLoading(true)
-        const promise = newPost({link, postDescription: description}, user.token);
-        
+        const promise = newPost({ link, postDescription: description }, user.token);
+
         promise.then(response => {
             setLink('')
             setDescription('')
@@ -68,15 +76,15 @@ export default function HomePage() {
                                 <form onSubmit={postLinkr}>
                                     <input placeholder="http://..." data-test="link" type="texy" value={link} onChange={(e) => setLink(e.target.value)} />
                                     <input placeholder="Awesome article about #javascript" data-test="description" type="text" value={description} onChange={(e) => setDescription(e.target.value)} />
-                                    <button data-test="publish-btn" disabled={loading} type="submit" value="Submit">{!loading ? 'Publish' :   <ThreeDots
-                                            color="#FFFFFF"
-                                            height="30"
-                                            width="60"
-                                            ariaLabel="three-dots-loading"
-                                            wrapperStyle={{}}
-                                            wrapperClassName=""
-                                            visible={true}
-                                        />}   
+                                    <button data-test="publish-btn" disabled={loading} type="submit" value="Submit">{!loading ? 'Publish' : <ThreeDots
+                                        color="#FFFFFF"
+                                        height="30"
+                                        width="60"
+                                        ariaLabel="three-dots-loading"
+                                        wrapperStyle={{}}
+                                        wrapperClassName=""
+                                        visible={true}
+                                    />}
                                     </button>
                                 </form>
                             </Right>

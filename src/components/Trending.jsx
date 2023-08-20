@@ -10,16 +10,34 @@ export default function Trending() {
     const { user } = useContext(UserContext);
     const [trending, setTrending] = useState(undefined);
 
+    // useEffect(() => {
+    //     const fetchData = () => {
+    //         axios
+    //             .get(`${API_URL}/trending`, headersAuth(user.token))
+    //             .then((res) => {
+    //                 setTrending(res.data);
+    //             })
+    //             .catch((err) => {
+    //                 console.log(err);
+    //             });
+    //     }
+
+    //     fetchData();
+
+    //     const intervalId = setInterval(fetchData, 10000);
+    //     return () => clearInterval(intervalId)
+    // }, []);
+
     useEffect(() => {
-        axios
-            .get(`${API_URL}/trending`, headersAuth(user.token))
-            .then((res) => {
-                setTrending(res.data);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    });
+            axios
+                .get(`${API_URL}/trending`, headersAuth(user.token))
+                .then((res) => {
+                    setTrending(res.data);
+                })
+                .catch((err) => {
+                    alert(err.response.data);
+                });
+    }, []);
 
     return (
         <TrendingContainerSC>

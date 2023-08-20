@@ -13,17 +13,34 @@ export default function HashtagPage() {
     const { hashtag } = useParams();
     const [tweets, setTweets] = useState(undefined);
 
+    // useEffect(() => {
+    //     const fetchData = () => {
+    //         axios.get(`${API_URL}/hashtags/${hashtag}`, headersAuth(user.token))
+    //             .then((res) => {
+    //                 console.log(res.data);
+    //                 setTweets(res.data);
+    //             })
+    //             .catch((err) => {
+    //                 console.log(err);
+    //                 // alert(err.response.data);
+    //             });
+    //     }
+
+    //     fetchData();
+
+    //     const intervalId = setInterval(fetchData, 10000);
+
+    //     return () => clearInterval(intervalId);
+    // })
     useEffect(() => {
-        axios.get(`${API_URL}/hashtags/${hashtag}`, headersAuth(user.token))
-            .then((res) => {
-                console.log(res.data);
-                setTweets(res.data);
-            })
-            .catch((err) => {
-                console.log(err);
-                // alert(err.response.data);
-            });
-    })
+            axios.get(`${API_URL}/hashtags/${hashtag}`, headersAuth(user.token))
+                .then((res) => {
+                    setTweets(res.data);
+                })
+                .catch((err) => {
+                    alert(err.response.data);
+                });
+    }, [hashtag]);
 
 
     return (

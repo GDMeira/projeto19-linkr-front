@@ -5,10 +5,9 @@ import Likes from "./Likes";
 
 
 export default function PostCard({ post }) {
-    let { id, url, linkTitle, linkDescription, linkImage, postDescription, pictureUrl, userName, linkers } = post
+    let { id, url, linkTitle, linkDescription, linkImage, postDescription, pictureUrl, userName, likers } = post
     
     if(!linkImage) linkImage = "https://lightwidget.com/wp-content/uploads/localhost-file-not-found.jpg";
-    console.log(post)
 
     function goToUrl(link) {
         return window.open(link)
