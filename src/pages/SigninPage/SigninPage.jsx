@@ -26,9 +26,9 @@ export default function SignInPage() {
         axios.post(`${API_URL}/signin`, dadosLogin)
           .then(resposta => {
             
-            const { userName, token, image } = resposta.data
-            setUser({ userName, token, image })
-            localStorage.setItem('user', JSON.stringify({ userName, token, image }))
+            const { id, userName, token, image } = resposta.data
+            setUser({ id, userName, token, image })
+            localStorage.setItem('user', JSON.stringify({ id, userName, token, image }))
             navigate('/home')
           })
           .catch((error) => {
