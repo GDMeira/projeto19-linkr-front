@@ -2,11 +2,26 @@ import React, { useState } from 'react';
 import { DebounceInput } from 'react-debounce-input';
 import axios from 'axios';
 import styled from 'styled-components';
+import UserContext from "../contexts/UserContext";
+import { useContext } from "react"
+import { searchUser } from '../Services/api.js';
+import { Link } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+
+
 
 function SearchBar() {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
+  const { user } = useContext(UserContext)
+    const navigate = useNavigate()
+
+    function goToUserPage(id) {
+        navigate(`/user/${id}`);
+        setSearchResults([]);
+    };
+
 
   const handleSearch = async (event) => {
     const newSearchTerm = event.target.value;
@@ -15,49 +30,55 @@ function SearchBar() {
     setLoading(true);
 
     if (newSearchTerm.length >= 3) {
+        
       try {
-        const response = await axios.get(`YOUR_SEARCH_ENDPOINT?query=${newSearchTerm}`);
+        const response = await searchUser(newSearchTerm, user.token);
         setSearchResults(response.data);
+        setLoading(false);
       } catch (error) {
         console.error(error);
       }
     } else {
+    
       setSearchResults([]);
+      setLoading(false)
     }
 
-    setLoading(false);
+    
   };
 
   return (
     <SearchContainer>
       <DebounceInputStyled
+        data-test="search"
         minLength={3}
         debounceTimeout={300}
         placeholder="Search for People"
         value={searchTerm}
         onChange={handleSearch}
       />
-      <SearchResults>
-        {loading ? (
-          <LoadingMessage>Loading...</LoadingMessage>
-        ) : (
-          searchResults.map((result) => (
-            <SearchResult key={result.id}>
-              <ProfileImage src={result.profileImage} alt="Profile" />
-              <Name>{result.name}</Name>
-            </SearchResult>
-          ))
-        )}
-      </SearchResults>
+      {searchResults.length > 0 && (
+        <ResultsContainer>
+          <ResultsDropdown>
+            {searchResults.map((result) => (
+                console.log(result),
+              <SearchResult data-test="user-search" onClick={() => goToUserPage(result.id)} key={result.id}>
+                <ProfileImage src={result.pictureUrl} alt="Profile" />
+                <Name>{result.userName}</Name>
+              </SearchResult>
+            ))}
+          </ResultsDropdown>
+        </ResultsContainer>
+      )}
     </SearchContainer>
   );
 }
 
 const SearchContainer = styled.div`
+  position: relative;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 10px;
 `;
 
 const DebounceInputStyled = styled(DebounceInput)`
@@ -65,9 +86,8 @@ const DebounceInputStyled = styled(DebounceInput)`
   height: 45px;
   flex-shrink: 0;
   border-radius: 10px;
-  background: #FFF;
+  background: #fff;
   padding: 10px 20px;
-  border: 1px solid #ccc;
   font-size: 19px;
   color: #333333;
   font-family: Lato;
@@ -77,52 +97,47 @@ const DebounceInputStyled = styled(DebounceInput)`
 
   ::placeholder {
     color: #C6C6C6;
-    font-family: 'Lato', sans-serif;
-    font-size: 19px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-    &:focus {
-        color: #333; // Darker color when focused
-      }
   }
 `;
 
-const SearchResults = styled.div`
-  margin-top: 10px;
+const ResultsContainer = styled.div`
+  position: absolute;
+  width: 100%;
+  top: 60px; /* Distance from the search bar */
+  left: 0;
+`;
+
+const ResultsDropdown = styled.div`
+  background-color: #e7e7e7;
+  border-radius: 10px;
+  padding: 10px;
 `;
 
 const SearchResult = styled.div`
   display: flex;
   align-items: center;
-  padding: 15px;
-  border-radius: 16px;
-  background-color: #E7E7E7;
-  margin-bottom: 10px;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
+  padding: 8px;
+  border-radius: 10px; /* Rounded borders */
+  margin-bottom: 8px;
 `;
 
 const ProfileImage = styled.img`
   width: 39px;
   height: 39px;
   border-radius: 50%;
-  margin-right: 15px;
+  margin-right: 12px;
 `;
 
 const Name = styled.div`
+  
   color: #515151;
-  font-family: Lato;
-  font-size: 19px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
+font-family: Lato;
+font-size: 19px;
+font-style: normal;
+font-weight: 400;
+line-height: normal; 
 `;
 
-const LoadingMessage = styled.div`
-  color: #888;
-`;
+
 
 export default SearchBar;

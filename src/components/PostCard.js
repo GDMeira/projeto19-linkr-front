@@ -8,7 +8,9 @@ import { useNavigate } from "react-router-dom";
 
 
 export default function PostCard({ post }) {
-    let { id, url, userId, linkTitle, linkDescription, linkImage, postDescription, pictureUrl, userName, likers } = post
+    let {id, url, userId, linkTitle, linkDescription, linkImage, postDescription, pictureUrl, userName, likers } = post
+
+    console.log(post)
     
     if(!linkImage) linkImage = "https://lightwidget.com/wp-content/uploads/localhost-file-not-found.jpg";
 
