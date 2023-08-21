@@ -42,7 +42,7 @@ export default function SignUpPage() {
 
       }else{
         setBtn(false)
-        navigate('/cadastro')
+        navigate('/')
         alert('Complete todos os dados') 
       }
   }
