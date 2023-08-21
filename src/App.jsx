@@ -19,8 +19,8 @@ function App() {
       <UserContext.Provider value={{ user, setUser }}>
         <Routes>
         <Route path="/" element={<SignInPage />} />
-        <Route path ='/home' element={<HomePage />}/>
-        <Route path="/cadastro" element={<SignUpPage />} /> 
+        <Route path ='/timeline' element={<HomePage />}/>
+        <Route path="/sign-up" element={<SignUpPage />} /> 
         <Route path="/hashtag/:hashtag" element={<HashtagPage />} />
         <Route path="/user/:id" element={<UserPage />} />
          

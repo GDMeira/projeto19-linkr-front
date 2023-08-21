@@ -29,7 +29,7 @@ export default function SignInPage() {
             const { id, userName, token, image } = resposta.data
             setUser({ id, userName, token, image })
             localStorage.setItem('user', JSON.stringify({ id, userName, token, image }))
-            navigate('/home')
+            navigate('/timeline')
           })
           .catch((error) => {
             //console.error(error.response.data)
@@ -66,7 +66,7 @@ export default function SignInPage() {
           <Mybutton data-test="login-btn" disabled={btn} style={{opacity: btn ? '.5' : '1'}}>Log In</Mybutton>
         </form>
 
-          <Link to={'/cadastro'} data-test="sign-up-link">
+          <Link to={'/sign-up'} data-test="sign-up-link">
             First time? Create an account! 
           </Link>
         </RightSideContainer>
