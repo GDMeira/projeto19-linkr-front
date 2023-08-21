@@ -27,14 +27,15 @@ export default function SignInPage() {
           .then(resposta => {
             
             const { userName, token, image } = resposta.data
+            
             setUser({ userName, token, image })
             localStorage.setItem('user', JSON.stringify({ userName, token, image }))
             navigate('/timeline')
           })
           .catch((error) => {
-            //console.error(error.response.data)
+            console.error()
             setBtn(false)
-            alert(error.response.message)
+            alert(error.response.data)
           })
       }else{
         setBtn(false)
