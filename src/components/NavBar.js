@@ -44,7 +44,7 @@ export default function NavBar({ intervalId }) {
         <>
 
             <HeaderUp>
-                <Logo onClick={() => navigate('/home')}>
+                <Logo onClick={() => navigate('/timeline')}>
                     Linkr
                 </Logo>
 
