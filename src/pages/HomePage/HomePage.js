@@ -13,42 +13,29 @@ export default function HomePage() {
 
     const [link, setLink] = useState('')
     const [description, setDescription] = useState('')
-    const [allPosts, setAllPosts] = useState([[]])
+    const [allPosts, setAllPosts] = useState(undefined)
     const [loading, setLoading] = useState(false)
     const [loadingPost, setLoadingPost] = useState(false)
 
-    // useEffect(() => {
-    //     const fetchData = () => {
-    //         getPosts(user.token)
-    //             .then(answer => {
-    //                 setAllPosts(answer.data);
-    //             })
-    //             .catch(error => alert("An error occured while trying to fetch the posts, please refresh the page"));
-    //     };
-
-    //     fetchData();
-
-    //     const intervalId = setInterval(fetchData, 10000);
-
-    //     return () => {
-    //         clearInterval(intervalId);
-    //     };
-    // });
-
     useEffect(() => {
+         const fetchData = () => {
+             getPosts(user.token)
+                 .then(answer => {
+                     setAllPosts(answer.data);
+                     if (loadingPost) setLoadingPost(false)
+                 })
+                 .catch(error => alert("An error occured while trying to fetch the posts, please refresh the page"));
+         };
 
-    setLoadingPost(true)
-        
-        getPosts(user.token)
-      .then((answer) => {
-        setAllPosts(answer.data);
-        setLoadingPost(false)
-      })
-      .catch((error) => {
-        console.error(error);
-        alert('An error occurred while trying to fetch the posts, please refresh the page');
-      })
-  }, []); // Empty dependency array to run once on component mount
+         if (!allPosts) setLoadingPost(true);
+         fetchData();
+
+         const intervalId = setInterval(fetchData, 10000);
+
+         return () => {
+             clearInterval(intervalId);
+         };
+     });
 
 
     function postLinkr(e) {
