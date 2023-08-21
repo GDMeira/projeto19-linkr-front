@@ -19,6 +19,7 @@ function SearchBar() {
 
     function goToUserPage(id) {
         navigate(`/user/${id}`);
+        setSearchResults([]);
     };
 
 
