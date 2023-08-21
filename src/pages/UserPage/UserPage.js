@@ -17,7 +17,7 @@ export default function UserPage() {
     const [link, setLink] = useState('')
     const [description, setDescription] = useState('')
     let [userInfo, setUserInfo] = useState([[]])
-    const [allPosts, setAllPosts] = useState([[]])
+    let [allPosts, setAllPosts] = useState(null)
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
@@ -27,6 +27,7 @@ export default function UserPage() {
             getPostsByUserId( id, user.token)
                 .then(answer => {
                     setUserInfo(answer.data)
+                    console.log(answer.data)
                     setLoading(false)
                     console.log(all)
                     setAllPosts(answer.data.posts);
@@ -41,7 +42,7 @@ export default function UserPage() {
         return () => {
             clearInterval(intervalId);
         };
-    }, [user]);
+    }, [user, id]);
 
     
 
@@ -76,10 +77,11 @@ export default function UserPage() {
                 <ContainerSC>
                     <PostContainerSC>
 
-                        {allPosts.length < 1 ? (
-                            <p data-test="message" >O usuário não possui publicações</p>
+                        {allPosts === null ? (
+                            <TitleSC2>O usuário não possui publicações</TitleSC2>
                         ) : (
-                            allPosts.map(post => (<PostCard key={post.id} post={post} />))
+                            console.log(allPosts),
+                            allPosts.map(post => (<PostCard  post={post} />))
                         )}
                     </PostContainerSC>
                     <Trending />
@@ -166,6 +168,20 @@ const TitleSC = styled.div`
         margin-top: 91px;
         margin-bottom: 19px;
         margin-left: 17px;
+    }
+`;
+
+const TitleSC2 = styled.div`
+    color: #FFF;
+    font-family: Oswald, monospace;
+    font-size: 43px;
+    font-style: normal;
+    font-weight: 700;
+    text-align: center;
+
+    @media (max-width: 768px) {
+        
+        font-size: 33px;
     }
 `;
 

@@ -31,3 +31,9 @@ export function getPostsByUserId(id, token) {
   console.log(promise)
   return promise
 }
+
+export function searchUser(search, token) {
+  const config = createConfig(token);
+  const promise = axios.get(`${BASE_URL}/search?username=${search}`, config)
+  return promise
+}
