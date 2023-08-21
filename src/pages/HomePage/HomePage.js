@@ -111,6 +111,9 @@ const Left = styled.div`
         height: 3.5vw;
         border-radius: 50%;
     }
+    @media (max-width: 768px){
+    display: none;
+}
 `
 
 const Right = styled.div`
@@ -120,6 +123,10 @@ const Right = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+
+    @media (max-width: 768px) {
+    width: 90vw;
+}
     h1 {
         font-size: 20px;
         color: #707070;
@@ -171,6 +178,10 @@ const NewPostContainer = styled.div`
     display: flex;
     justify-content: space-evenly;
     margin-bottom: 15px;
+    @media (max-width: 768px) {
+    border-radius: 0;
+    height: 230px;
+}
 `
 const PageSC = styled.div`
     background: #333;
@@ -179,6 +190,10 @@ const PageSC = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    @media (max-width: 768px) {
+        width: 100vw;
+        margin-right: 0px;
+    }
 `;
 
 const ContainerSC = styled.div`

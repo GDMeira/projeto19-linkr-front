@@ -42,6 +42,7 @@ const Info = styled.div`
     align-items: center;
     justify-content: space-evenly;
     padding: 20px;
+
 `
 
 const Image = styled.img`
@@ -65,15 +66,26 @@ const Left = styled.div`
         height: 3.5vw;
         border-radius: 50%;
     }
+    @media (max-width: 768px) {
+    width: 10vw;
+    img {
+    width: 5vh;
+    height: 5vh;
+}
+}
 `
 
 const Right = styled.div`
+        padding-right: 20px;
     width: 37vw;
     height: 25vh;
     margin: 2vh 0;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    @media (max-width: 768px){
+        width: 90vw;
+    }   
     h1{
         color: #FFFFFF;
         font-family: Lato;
@@ -108,6 +120,10 @@ const Linkr = styled.div`
     display: flex;
     justify-content: space-between;
     cursor: pointer;
+
+    @media (max-width: 768px) {
+        width: 100%;
+    }
 
     h3{
         font-family: Lato;
