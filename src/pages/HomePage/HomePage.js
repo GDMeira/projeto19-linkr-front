@@ -37,6 +37,14 @@ export default function HomePage() {
          };
      });
 
+    // useEffect(() => {
+    //     getPosts(user.token)
+    //         .then(answer => {
+    //             setAllPosts(answer.data);
+    //         })
+    //         .catch(error => alert("An error occured while trying to fetch the posts, please refresh the page"));
+    // });
+
 
     function postLinkr(e) {
         e.preventDefault();
