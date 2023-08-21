@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom"
 import { IonIcon } from '@ionic/react';
 import { chevronUpOutline, chevronDownOutline } from 'ionicons/icons';
 import { useState } from "react";
+import SearchBar from "./SearchBar";
 
 
 
@@ -46,6 +47,8 @@ export default function NavBar({ intervalId }) {
                 <Logo onClick={() => navigate('/home')}>
                     Linkr
                 </Logo>
+
+                <SearchBar />
 
                 <Picture>
                     <IonIcon onClick={arrowChange} icon={arrow ? chevronUpOutline : chevronDownOutline} style={{ fontSize: '24px', color: 'white', backgroundColor: '#151515' }} />

@@ -15,6 +15,7 @@ export default function HomePage() {
     const [description, setDescription] = useState('')
     const [allPosts, setAllPosts] = useState([[]])
     const [loading, setLoading] = useState(false)
+    const [loadingPost, setLoadingPost] = useState(false)
 
     // useEffect(() => {
     //     const fetchData = () => {
@@ -35,12 +36,19 @@ export default function HomePage() {
     // });
 
     useEffect(() => {
+
+    setLoadingPost(true)
+        
         getPosts(user.token)
-            .then(answer => {
-                setAllPosts(answer.data);
-            })
-            .catch(error => alert("An error occured while trying to fetch the posts, please refresh the page"));
-    });
+      .then((answer) => {
+        setAllPosts(answer.data);
+        setLoadingPost(false)
+      })
+      .catch((error) => {
+        console.error(error);
+        alert('An error occurred while trying to fetch the posts, please refresh the page');
+      })
+  }, []); // Empty dependency array to run once on component mount
 
 
     function postLinkr(e) {
@@ -51,7 +59,15 @@ export default function HomePage() {
         promise.then(response => {
             setLink('')
             setDescription('')
-            setLoading(false)
+            getPosts(user.token)
+            .then((answer) => {
+                setAllPosts(answer.data);
+                setLoading(false)
+      })
+        .catch((error) => {
+            console.error(error);
+            alert('An error occurred while trying to fetch the posts, please refresh the page');    
+        })
         });
         promise.catch(err => alert("An error occured while trying to fetch the posts, please refresh the page"));
     }
@@ -63,7 +79,11 @@ export default function HomePage() {
             <PageSC>
                 <TitleSC>timeline</TitleSC>
 
-
+                {loadingPost ? (
+                <LoadingContainer>
+                    <ThreeDots color="#FFF" height={80} width={80} />
+                </LoadingContainer>
+            ) : (
 
                 <ContainerSC>
                     <PostContainerSC>
@@ -98,10 +118,25 @@ export default function HomePage() {
                     </PostContainerSC>
                     <Trending />
                 </ContainerSC>
+            )}
             </PageSC>
         </>
     )
 }
+
+const LoadingContainer = styled.div`
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    height: 100vh; /* Set to the full viewport height */
+    background-color: rgba(0, 0, 0, 0.5); /* Add a semi-transparent background */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 9999; /* Ensure it's above other content */
+`;
+
 
 const Left = styled.div`
     margin: 20px 30px;
