@@ -3,7 +3,7 @@ import { styled } from "styled-components";
 import HashtagPage from "./pages/HashtagPage/HashtagPage";
 //import HomePage from "./pages/HomePage/HomePage";
 import HomePage from "./pages/HomePage/HomePage";
-import SignInPage from "./pages/SignInPage/SigninPage";
+import SignInPage from "./pages/SigninPage/SigninPage";
 import SignUpPage from "./pages/SignUpPage/SignUpPage";
 import { useState } from "react";
 import UserContext from "./contexts/UserContext";
