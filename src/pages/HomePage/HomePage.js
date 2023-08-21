@@ -105,7 +105,7 @@ export default function HomePage() {
                             </Right>
                         </NewPostContainer>
 
-                        {allPosts.length < 1 ? (
+                        {allPosts?.length < 1 || !allPosts ? (
                             <p data-test="message" >Ainda Não Existe serviço disponível</p>
                         ) : (
                             allPosts.map(post => (<PostCard key={post.id} post={post} />))
