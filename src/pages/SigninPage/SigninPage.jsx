@@ -32,9 +32,9 @@ export default function SignInPage() {
             navigate('/timeline')
           })
           .catch((error) => {
-            //console.error(error.response.data)
+            console.error()
             setBtn(false)
-            alert(error.response.message)
+            alert(error.response.data)
           })
       }else{
         setBtn(false)
