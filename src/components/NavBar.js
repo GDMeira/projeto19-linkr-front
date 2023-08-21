@@ -27,9 +27,11 @@ export default function NavBar({ intervalId }) {
     function logOut() {
         axios.delete(`${API_URL}/logout`, headersAuth(user.token))
             .then(resposta => {
+                if(resposta){//Mudanças aqui
                 navigate('/')
                 setUser('')
-                localStorage.clear();
+                localStorage.clear()
+            };
             }
 
             )
