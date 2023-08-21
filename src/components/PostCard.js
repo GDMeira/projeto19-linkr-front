@@ -48,9 +48,11 @@ export default function PostCard({ post }) {
 const Info = styled.div`
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-evenly;
     padding: 20px;
+    width: 25vw;
+    overflow: hidden;
 `
 
 const Image = styled.img`
