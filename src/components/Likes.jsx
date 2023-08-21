@@ -33,24 +33,25 @@ export default function Likes({ likers, postId }) {
 
     function tooltipContent() {
         if (!likers) return '';
+        const likersWithoutUser = likers.filter(liker => liker !== user.userName);
 
         if (states.liked) {
-            if (likers.length < 2) {
+            if (likersWithoutUser.length < 1) {
                 return 'Você';
-            } else if (likers.length < 3) {
-                return `Você, ${likers.find(liker => liker !== user.userName)}`
+            } else if (likersWithoutUser.length < 2) {
+                return `Você e ${likersWithoutUser[0]}`
             } else {
-                return `Você, ${likers.find(liker => liker !== user.userName)} e outras ${likers.length - 2} pessoas`
+                return `Você, ${likersWithoutUser[0]} e outras ${likersWithoutUser.length - 1} pessoas`
             }
         } else {
-            if (likers.length < 1) {
+            if (likersWithoutUser.length < 1) {
                 return '';
-            } else if (likers.length < 2) {
-                return likers[0];
-            } else if (likers.length < 3) {
-                return `${likers[0]}, ${likers[1]}`
+            } else if (likersWithoutUser.length < 2) {
+                return likersWithoutUser[0];
+            } else if (likersWithoutUser.length < 3) {
+                return `${likersWithoutUser[0]} e ${likersWithoutUser[1]}`
             } else {
-                return `${likers[0]}, ${likers[1]} e outras ${likers.length - 2} pessoas`
+                return `${likersWithoutUser[0]}, ${likersWithoutUser[1]} e outras ${likersWithoutUser.length - 2} pessoas`
             }
         }
     }
