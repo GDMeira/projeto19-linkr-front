@@ -2,10 +2,13 @@ import styled from "styled-components";
 import React from "react";
 import PostText from "./PostText";
 import Likes from "./Likes";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 
 
 export default function PostCard({ post }) {
-    let { id, url, linkTitle, linkDescription, linkImage, postDescription, pictureUrl, userName, likers } = post
+    let { id, url, userId, linkTitle, linkDescription, linkImage, postDescription, pictureUrl, userName, likers } = post
     
     if(!linkImage) linkImage = "https://lightwidget.com/wp-content/uploads/localhost-file-not-found.jpg";
 
@@ -14,14 +17,20 @@ export default function PostCard({ post }) {
         //return window.location.href = link;
     }
 
+    const navigate = useNavigate();
+
+    const goToUserPage = () => {
+        navigate(`/user/${userId}`);
+    };
+
     return (
         <ListServiceContainer data-test="post">
             <Left>
-                <img src={pictureUrl} alt="foto do criador" />
+             <img onClick={goToUserPage} src={pictureUrl} alt="foto do criador" /> 
                 <Likes likers={likers} postId={id}/>
             </Left>
             <Right>
-                <h1 data-test="username"><strong>{userName}</strong></h1>
+               <h1 onClick={goToUserPage} data-test="username"><strong>{userName}</strong></h1> 
                 <PostText>{postDescription}</PostText>
                 <Linkr data-test="link" onClick={() => goToUrl(url)}>
                     <Info >
@@ -39,10 +48,11 @@ export default function PostCard({ post }) {
 const Info = styled.div`
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-evenly;
     padding: 20px;
-
+    width: 25vw;
+    overflow: hidden;
 `
 
 const Image = styled.img`
@@ -113,7 +123,7 @@ const Right = styled.div`
 
 
 const Linkr = styled.div`
-    width: 33vw;
+    max-width: 33vw;
     height: 16vh;
     border: 1px solid #4D4D4D;
     border-radius: 16px;

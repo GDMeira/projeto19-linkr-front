@@ -23,3 +23,11 @@ export function newPost(body, token) {
 
     return promise
 }
+
+export function getPostsByUserId(id, token) {
+  const config = createConfig(token);
+  console.log(config)
+  const promise = axios.get(`${BASE_URL}/user/${id}`, config)
+  console.log(promise)
+  return promise
+}

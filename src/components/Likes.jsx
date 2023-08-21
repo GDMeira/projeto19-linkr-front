@@ -5,6 +5,7 @@ import { API_URL, headersAuth } from "../routes/routes";
 import axios from "axios";
 import UserContext from "../contexts/UserContext";
 import { Tooltip } from "react-tooltip";
+import { Button } from "@chakra-ui/react";
 
 export default function Likes({ likers, postId }) {
     const { user } = useContext(UserContext);
@@ -31,45 +32,51 @@ export default function Likes({ likers, postId }) {
     }
 
     function tooltipContent() {
-        if (!likers) return
-        if (likers.length === 0) return 'Nenhuma curtida';
+        if (!likers) return '';
+        const likersWithoutUser = likers.filter(liker => liker !== user.userName);
 
         if (states.liked) {
-            if (likers.length < 2) {
+            if (likersWithoutUser.length < 1) {
                 return 'Você';
-            } else if (likers.length < 3) {
-                return `Você, ${likers.find(liker => liker !== user.userName)}`
+            } else if (likersWithoutUser.length < 2) {
+                return `Você e ${likersWithoutUser[0]}`
             } else {
-                return `Você, ${likers.find(liker => liker !== user.userName)} e outras ${likers.length - 2} pessoas`
+                return `Você, ${likersWithoutUser[0]} e outras ${likersWithoutUser.length - 1} pessoas`
             }
         } else {
-            if (likers.length < 2) {
-                return likers[0];
-            } else if (likers.length < 3) {
-                return `${likers[0]}, ${likers[1]}`
+            if (likersWithoutUser.length < 1) {
+                return '';
+            } else if (likersWithoutUser.length < 2) {
+                return likersWithoutUser[0];
+            } else if (likersWithoutUser.length < 3) {
+                return `${likersWithoutUser[0]} e ${likersWithoutUser[1]}`
             } else {
-                return `${likers[0]}, ${likers[1]} e outras ${likers.length - 2} pessoas`
+                return `${likersWithoutUser[0]}, ${likersWithoutUser[1]} e outras ${likersWithoutUser.length - 2} pessoas`
             }
         }
     }
 
     return (
         <Flex direction="column" w='100%' h="6vh" align='center' justifyContent='space-between'>
-            {states.liked ? (
-                <AiFillHeart color="red" size={30} onClick={toggleLike} />
-            ) : (
-                <AiOutlineHeart color="white" size={30} onClick={toggleLike} />
-            )}
+            <Button data-test="like-btn" bg="none" onClick={toggleLike} >
+                {states.liked ? (
+                    <AiFillHeart color="red" size={30} />
+                ) : (
+                    <AiOutlineHeart color="white" size={30} />
+                )}
+            </Button>
             <Text
                 color='white'
                 fontSize={14}
                 data-tooltip-id="my-tooltip"
                 data-tooltip-content={tooltipContent()}
                 data-tooltip-place="bottom"
+                data-test="counter"
             >
                 {states.likeNumber} likes
-                <Tooltip id="my-tooltip" />
+
             </Text>
+            <Tooltip id="my-tooltip" data-test="tooltip" />
         </Flex>
     )
 }

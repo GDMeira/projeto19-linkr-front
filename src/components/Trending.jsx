@@ -29,25 +29,33 @@ export default function Trending() {
     // }, []);
 
     useEffect(() => {
-            axios
-                .get(`${API_URL}/trending`, headersAuth(user.token))
-                .then((res) => {
-                    setTrending(res.data);
-                })
-                .catch((err) => {
-                    alert(err.response.data);
-                });
+        axios
+            .get(`${API_URL}/trending`, headersAuth(user.token))
+            .then((res) => {
+                setTrending(res.data);
+            })
+            .catch((err) => {
+                alert(err.response.data);
+            });
     }, []);
 
     return (
-        <TrendingContainerSC>
+        <TrendingContainerSC data-test="trending">
             <h1>trending</h1>
             <hr />
             {!trending ? (
                 <h1>Loading...</h1>
             ) : (
                 <ul>
-                    {trending.map(t => <li key={t.name} onClick={() => navigate(`/hashtag/${t.name}`)}># {t.name}</li>)}
+                    {trending.map(t => (
+                        <li
+                            key={t.name}
+                            onClick={() => navigate(`/hashtag/${t.name}`)}
+                            data-test="hashtag"
+                        >
+                            # {t.name}
+                        </li>)
+                    )}
                 </ul>
             )}
         </TrendingContainerSC>

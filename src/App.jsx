@@ -7,6 +7,8 @@ import SignInPage from "./pages/SigninPage/SigninPage";
 import SignUpPage from "./pages/SignUpPage/SignUpPage";
 import { useState } from "react";
 import UserContext from "./contexts/UserContext";
+import UserPage from "./pages/UserPage/UserPage";
+
 
 function App() {
   const [user, setUser] = useState(undefined);
@@ -19,7 +21,8 @@ function App() {
         <Route path="/" element={<SignInPage />} />
         <Route path ='/home' element={<HomePage />}/>
         <Route path="/cadastro" element={<SignUpPage />} /> 
-        <Route path="/hashtag/:hashtag" element={<HashtagPage />} /> 
+        <Route path="/hashtag/:hashtag" element={<HashtagPage />} />
+        <Route path="/user/:id" element={<UserPage />} />
          
         
         </Routes>
