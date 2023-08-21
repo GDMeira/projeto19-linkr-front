@@ -24,7 +24,7 @@ export default function SignUpPage() {
       }
      
       
-      if(password !== null && password !== '' && email !== null && email !== '' && userName !== null && userName !== ''){
+      if(password !== null && password !== '' && email !== null && email !== '' && userName !== null && userName !== '' && pictureUrl !== null && pictureUrl !==''){
         
         axios.post(`${API_URL}/signup`, dadosCadastro)
         .then((resposta) =>{
