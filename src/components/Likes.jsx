@@ -5,6 +5,7 @@ import { API_URL, headersAuth } from "../routes/routes";
 import axios from "axios";
 import UserContext from "../contexts/UserContext";
 import { Tooltip } from "react-tooltip";
+import { Button } from "@chakra-ui/react";
 
 export default function Likes({ likers, postId }) {
     const { user } = useContext(UserContext);
@@ -31,8 +32,7 @@ export default function Likes({ likers, postId }) {
     }
 
     function tooltipContent() {
-        if (!likers) return
-        if (likers.length === 0) return 'Nenhuma curtida';
+        if (!likers) return '';
 
         if (states.liked) {
             if (likers.length < 2) {
@@ -43,7 +43,9 @@ export default function Likes({ likers, postId }) {
                 return `Você, ${likers.find(liker => liker !== user.userName)} e outras ${likers.length - 2} pessoas`
             }
         } else {
-            if (likers.length < 2) {
+            if (likers.length < 1) {
+                return '';
+            } else if (likers.length < 2) {
                 return likers[0];
             } else if (likers.length < 3) {
                 return `${likers[0]}, ${likers[1]}`
@@ -55,21 +57,25 @@ export default function Likes({ likers, postId }) {
 
     return (
         <Flex direction="column" w='100%' h="6vh" align='center' justifyContent='space-between'>
-            {states.liked ? (
-                <AiFillHeart color="red" size={30} onClick={toggleLike} />
-            ) : (
-                <AiOutlineHeart color="white" size={30} onClick={toggleLike} />
-            )}
+            <Button data-test="like-btn" bg="none" onClick={toggleLike} >
+                {states.liked ? (
+                    <AiFillHeart color="red" size={30} />
+                ) : (
+                    <AiOutlineHeart color="white" size={30} />
+                )}
+            </Button>
             <Text
                 color='white'
                 fontSize={14}
                 data-tooltip-id="my-tooltip"
                 data-tooltip-content={tooltipContent()}
                 data-tooltip-place="bottom"
+                data-test="counter"
             >
                 {states.likeNumber} likes
-                <Tooltip id="my-tooltip" />
+
             </Text>
+            <Tooltip id="my-tooltip" data-test="tooltip" />
         </Flex>
     )
 }
