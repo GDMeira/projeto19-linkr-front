@@ -1,61 +1,103 @@
 import styled from "styled-components";
-import axios from "axios";
-import { useState } from "react";
-import { useEffect } from "react";
 import React from "react";
+import PostText from "./PostText";
+import Likes from "./Likes";
+import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import useAuth from "../hooks/useAuth";
 
-export default function PostCard({post}) {
-    const { auth, login, user, localUser } = useAuth();
-    const {id, userId, link, title, linkDescription, image, postDescription, userImage, userName} = post
-    const navigate = useNavigate();
 
-    function details(id) {
-        navigate(`/detalhes/${id}`);
 
-    }
+export default function PostCard({ post }) {
+    let {id, url, userId, linkTitle, linkDescription, linkImage, postDescription, pictureUrl, userName, likers } = post
+
+    console.log(post)
+    
+    if(!linkImage) linkImage = "https://lightwidget.com/wp-content/uploads/localhost-file-not-found.jpg";
 
     function goToUrl(link) {
-        
+        return window.open(link)
+        //return window.location.href = link;
     }
 
-return (
-    <ListServiceContainer key={id} data-test="post">
-        <Left>
-            <img src={userImage} alt="foto do criador" />
-            {/* no futuro likes */}
-        </Left>
-        <Right>
-            <h1 data-test="username"><strong>{userName}</strong></h1>
-            <h2 data-test="description">{postDescription}</h2>
-            <Linkr  data-test="link">
-                <Info onClick={() => goToUrl()}>
-                    <h3>{title}</h3>
-                    <h4>{linkDescription}</h4>
-                    <h5>{link}</h5>
-                </Info>
-                <Image>
-                    <img src={image} alt="link" />
-                </Image>
-            </Linkr>
-        </Right>
-    </ListServiceContainer>
-)}
+    const navigate = useNavigate();
+
+    const goToUserPage = () => {
+        navigate(`/user/${userId}`);
+    };
+
+    return (
+        <ListServiceContainer data-test="post">
+            <Left>
+             <img onClick={goToUserPage} src={pictureUrl} alt="foto do criador" /> 
+                <Likes likers={likers} postId={id}/>
+            </Left>
+            <Right>
+               <h1 onClick={goToUserPage} data-test="username"><strong>{userName}</strong></h1> 
+                <PostText>{postDescription}</PostText>
+                <Linkr data-test="link" onClick={() => goToUrl(url)}>
+                    <Info >
+                        <h3>{linkTitle}</h3>
+                        <h4>{linkDescription}</h4>
+                        <h5>{url}</h5>
+                    </Info>
+                    <Image src={linkImage} alt="link" />
+                </Linkr>
+            </Right>
+        </ListServiceContainer>
+    )
+}
+
+const Info = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-evenly;
+    padding: 20px;
+    width: 25vw;
+    overflow: hidden;
+`
+
+const Image = styled.img`
+    height: 155px;
+    width: 155px;
+`
 
 const Left = styled.div`
-    padding:7px;
-    width: 50px;
+    margin: 0 30px;
+    padding-top: 20px;
+    width: 3.5vw;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+    justify-content: flex-start;
+
     img {
-        width: 50px;
-        height: 50px;
-        border-radius: 26.5px;
+        width: 3.5vw;
+        height: 3.5vw;
+        border-radius: 50%;
     }
+    @media (max-width: 768px) {
+    width: 10vw;
+    img {
+    width: 5vh;
+    height: 5vh;
+}
+}
 `
 
 const Right = styled.div`
-    width: 503px;
-    height: 276px;
+        padding-right: 20px;
+    width: 37vw;
+    height: 25vh;
+    margin: 2vh 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    @media (max-width: 768px){
+        width: 90vw;
+    }   
     h1{
         color: #FFFFFF;
         font-family: Lato;
@@ -73,15 +115,27 @@ const Right = styled.div`
         letter-spacing: 0em;
         text-align: left;
         color: linear-gradient(0deg, #B7B7B7, #B7B7B7),linear-gradient(0deg, #FFFFFF, #FFFFFF);
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2; /* number of lines to show */
+        line-clamp: 2; 
+        -webkit-box-orient: vertical;
 }
 `
 
 
 const Linkr = styled.div`
-    width: 503px;
-    height: 155px;
+    width: 33vw;
+    height: 16vh;
     border: 1px solid #4D4D4D;
     border-radius: 16px;
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+
+    @media (max-width: 768px) {
+        width: 100%;
+    }
 
     h3{
         font-family: Lato;
@@ -91,6 +145,11 @@ const Linkr = styled.div`
         letter-spacing: 0em;
         text-align: left;
         color: #CECECE;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2; /* number of lines to show */
+        line-clamp: 2; 
+        -webkit-box-orient: vertical;
     }
     h4 {
         font-family: Lato;
@@ -100,6 +159,11 @@ const Linkr = styled.div`
         letter-spacing: 0em;
         text-align: left;
         color: #9B9595;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2; /* number of lines to show */
+        line-clamp: 2; 
+        -webkit-box-orient: vertical;
     }
     h5 {
         font-family: Lato;
@@ -109,28 +173,30 @@ const Linkr = styled.div`
         letter-spacing: 0em;
         text-align: left;
         color: #CECECE;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2; /* number of lines to show */
+        line-clamp: 2; 
+        -webkit-box-orient: vertical;
     }
     img {
-        height: 155px;
-        width: 155px;
+        height: 16vh;
+        border-radius: 0 16px 16px 0;
     }
 `
 
 const ListServiceContainer = styled.div`
-    width: 611px;
-    height: 276px;
+    width: 100%;
+    height: 27vh;
     top: 470px;
     left: 241px;
     border: 1px;
 
     display: flex;
-    flex-direction:column;
+    align-items: center;
+    justify-content: flex-start;
     background: #171717;
     border-radius: 15px;
     margin-top: 5px;
     margin-bottom: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-
 `

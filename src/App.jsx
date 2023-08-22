@@ -2,10 +2,12 @@ import { BrowserRouter,Routes,Route } from "react-router-dom";
 import { styled } from "styled-components";
 import HashtagPage from "./pages/HashtagPage/HashtagPage";
 import HomePage from "./pages/HomePage/HomePage";
+import SignInPage from "./pages/SigninPage/SigninPage";
 import SignUpPage from "./pages/SignUpPage/SignUpPage";
 import { useState } from "react";
 import UserContext from "./contexts/UserContext";
-import SignInPage from "./pages/SigninPage/SigninPage";
+import UserPage from "./pages/UserPage/UserPage";
+
 
 function App() {
   const [user, setUser] = useState(undefined);
@@ -16,16 +18,10 @@ function App() {
       <UserContext.Provider value={{ user, setUser }}>
         <Routes>
         <Route path="/" element={<SignInPage />} />
-<<<<<<< Updated upstream
-        <Route path ='/home' element={<HomePage />}/>
-        <Route path="/cadastro" element={<SignUpPage />} /> 
-        <Route path="/hashtag/:hashtag" element={<HashtagPage />} /> 
-=======
         <Route path ='/timeline' element={<HomePage />}/>
         <Route path="/sign-up" element={<SignUpPage />} /> 
         <Route path="/hashtag/:hashtag" element={<HashtagPage />} />
         <Route path="/user/:id" element={<UserPage />} />
->>>>>>> Stashed changes
          
         
         </Routes>

@@ -24,7 +24,7 @@ export default function SignUpPage() {
       }
      
       
-      if(password !== null && password !== '' && email !== null && email !== '' && userName !== null && userName !== ''){
+      if(password !== null && password !== '' && email !== null && email !== '' && userName !== null && userName !== '' && pictureUrl !== null && pictureUrl !==''){
         
         axios.post(`${API_URL}/signup`, dadosCadastro)
         .then((resposta) =>{
@@ -42,7 +42,7 @@ export default function SignUpPage() {
 
       }else{
         setBtn(false)
-        navigate('/cadastro')
+        navigate('/')
         alert('Complete todos os dados') 
       }
   }
@@ -67,15 +67,15 @@ export default function SignUpPage() {
         <form onSubmit={enviarCadastro}>
             
         
-            <input placeholder="e-mail" type="email" value={email} onChange={e => setEmail(e.target.value)}/>
-            <input placeholder="password" type="password" autoComplete="new-password" value={password} onChange={e => setPassword(e.target.value)}/>
-            <input placeholder="username" type="text"  value={userName} onChange={e => setUserName(e.target.value)}/>
-            <input placeholder="pictureUrl" type="text" value={pictureUrl} onChange={e => setPictureUrl(e.target.value)}/>
-            <Mybutton disabled={btn} style={{opacity: btn ? '.5' : '1'}}>Sign Up</Mybutton>
+            <input data-test="email" placeholder="e-mail" type="email" value={email} onChange={e => setEmail(e.target.value)}/>
+            <input data-test="password" placeholder="password" type="password" autoComplete="new-password" value={password} onChange={e => setPassword(e.target.value)}/>
+            <input data-test="username" placeholder="username" type="text"  value={userName} onChange={e => setUserName(e.target.value)}/>
+            <input data-test="picture-url" placeholder="pictureUrl" type="text" value={pictureUrl} onChange={e => setPictureUrl(e.target.value)}/>
+            <Mybutton data-test="sign-up-btn" disabled={btn} style={{opacity: btn ? '.5' : '1'}}>Sign Up</Mybutton>
     
         </form>
 
-        <Link to={'/'}>
+        <Link to={'/'} data-test="login-link">
             Switch back to log in
         </Link>
         </RightSideContainer>

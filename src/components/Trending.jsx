@@ -1,32 +1,61 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { styled } from "styled-components";
-import { API_URL } from "../routes/routes";
-import { Link } from "react-router-dom";
+import { API_URL, headersAuth } from "../routes/routes";
+import { useNavigate } from "react-router-dom";
+import UserContext from "../contexts/UserContext";
 
 export default function Trending() {
+    const navigate = useNavigate();
+    const { user } = useContext(UserContext);
     const [trending, setTrending] = useState(undefined);
+
+    // useEffect(() => {
+    //     const fetchData = () => {
+    //         axios
+    //             .get(`${API_URL}/trending`, headersAuth(user.token))
+    //             .then((res) => {
+    //                 setTrending(res.data);
+    //             })
+    //             .catch((err) => {
+    //                 console.log(err);
+    //             });
+    //     }
+
+    //     fetchData();
+
+    //     const intervalId = setInterval(fetchData, 10000);
+    //     return () => clearInterval(intervalId)
+    // }, []);
 
     useEffect(() => {
         axios
-            .get(`${API_URL}/trending`)
+            .get(`${API_URL}/trending`, headersAuth(user.token))
             .then((res) => {
                 setTrending(res.data);
             })
             .catch((err) => {
-                console.log(err);
+                alert(err.response.data);
             });
     }, []);
 
     return (
-        <TrendingContainerSC>
+        <TrendingContainerSC data-test="trending">
             <h1>trending</h1>
             <hr />
             {!trending ? (
                 <h1>Loading...</h1>
             ) : (
                 <ul>
-                    {trending.map(t => <li key={t.name}><Link to={`/hashtag/${t.name}`}># {t.name}</Link></li>)}
+                    {trending.map(t => (
+                        <li
+                            key={t.name}
+                            onClick={() => navigate(`/hashtag/${t.name}`)}
+                            data-test="hashtag"
+                        >
+                            # {t.name}
+                        </li>)
+                    )}
                 </ul>
             )}
         </TrendingContainerSC>
@@ -56,7 +85,8 @@ const TrendingContainerSC = styled.div`
         height: 320px;
         display: flex;
         flex-direction: column;
-        justify-content: space-evenly;
+        justify-content: flex-start;
+        gap: 10px;
     }
 
     li {
@@ -75,6 +105,7 @@ const TrendingContainerSC = styled.div`
     }
 
     @media (max-width: 768px) {
+        display: none;
         width: 100vw;
         position: static;
         margin-top: 15px;

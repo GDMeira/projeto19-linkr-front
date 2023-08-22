@@ -12,7 +12,7 @@ export default function PostText({ children }) {
     )
 }
 
-const TextSC = styled.span`
+const TextSC = styled.span.attrs({'data-test': "description"})`
     color: #B7B7B7;
     font-family: Lato, Arial, sans-serif;
     font-size: 17px;

@@ -26,15 +26,15 @@ export default function SignInPage() {
         axios.post(`${API_URL}/signin`, dadosLogin)
           .then(resposta => {
             
-            const { userName, token, image } = resposta.data
-            setUser({ userName, token, image })
-            localStorage.setItem('user', JSON.stringify({ userName, token, image }))
+            const { id, userName, token, image } = resposta.data
+            setUser({ id, userName, token, image })
+            localStorage.setItem('user', JSON.stringify({ id, userName, token, image }))
             navigate('/timeline')
           })
           .catch((error) => {
-            //console.error(error.response.data)
+            console.error()
             setBtn(false)
-            alert(error.response.message)
+            alert(error.response.data)
           })
       }else{
         setBtn(false)
@@ -61,16 +61,12 @@ export default function SignInPage() {
       <RightSideContainer>
         <form onSubmit={login}>
           
-          <input placeholder="E-mail" type="email" value={emailLogin} autoComplete="email" onChange={e => setEmailLogin(e.target.value)} />
-          <input placeholder="Senha" required type="password" autoComplete="password" value={senhaLogin} onChange={e => setSenhaLogin(e.target.value)} />
-          <Mybutton disabled={btn} style={{opacity: btn ? '.5' : '1'}}>Log In</Mybutton>
+          <input data-test="email" placeholder="E-mail" type="email" value={emailLogin} autoComplete="email" onChange={e => setEmailLogin(e.target.value)} />
+          <input data-test="password" placeholder="Senha" required type="password" autoComplete="password" value={senhaLogin} onChange={e => setSenhaLogin(e.target.value)} />
+          <Mybutton data-test="login-btn" disabled={btn} style={{opacity: btn ? '.5' : '1'}}>Log In</Mybutton>
         </form>
 
-<<<<<<< Updated upstream
-          <Link to={'/cadastro'}>
-=======
           <Link to={'/sign-up'} data-test="sign-up-link">
->>>>>>> Stashed changes
             First time? Create an account! 
           </Link>
         </RightSideContainer>
