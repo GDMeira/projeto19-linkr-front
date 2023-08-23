@@ -21,7 +21,7 @@ export default function HomePage() {
             getPosts(user.token)
                 .then(answer => {
                     setAllPosts(answer.data);
-                    if (loadingPost) setLoadingPost(false)
+                    setLoadingPost(false)
                 })
                 .catch(error => alert("An error occured while trying to fetch the posts, please refresh the page"));
         };
@@ -29,11 +29,11 @@ export default function HomePage() {
         if (!allPosts) setLoadingPost(true);
         fetchData();
 
-        // const intervalId = setInterval(fetchData, 10000);
+        const intervalId = setInterval(fetchData, 10000);
 
-        // return () => {
-        //     clearInterval(intervalId);
-        // };
+        return () => {
+            clearInterval(intervalId);
+        };
     }, []);
 
 
