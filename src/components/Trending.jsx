@@ -1,43 +1,16 @@
-import axios from "axios";
-import { useContext, useEffect, useState } from "react";
+import { useEffect } from "react";
 import { styled } from "styled-components";
-import { API_URL, headersAuth } from "../routes/routes";
 import { useNavigate } from "react-router-dom";
-import UserContext from "../contexts/UserContext";
+import { getTrendings } from "../Services/api";
+import { useAllContexts } from "../hooks/useAllContexts";
 
 export default function Trending() {
     const navigate = useNavigate();
-    const { user } = useContext(UserContext);
-    const [trending, setTrending] = useState(undefined);
-
-    // useEffect(() => {
-    //     const fetchData = () => {
-    //         axios
-    //             .get(`${API_URL}/trending`, headersAuth(user.token))
-    //             .then((res) => {
-    //                 setTrending(res.data);
-    //             })
-    //             .catch((err) => {
-    //                 console.log(err);
-    //             });
-    //     }
-
-    //     fetchData();
-
-    //     const intervalId = setInterval(fetchData, 10000);
-    //     return () => clearInterval(intervalId)
-    // }, []);
+    const { trending, setTrending, allPosts, user } = useAllContexts();
 
     useEffect(() => {
-        axios
-            .get(`${API_URL}/trending`, headersAuth(user.token))
-            .then((res) => {
-                setTrending(res.data);
-            })
-            .catch((err) => {
-                alert(err.response.data);
-            });
-    }, []);
+        getTrendings(user.token, setTrending);
+    }, [allPosts, user]);
 
     return (
         <TrendingContainerSC data-test="trending">
