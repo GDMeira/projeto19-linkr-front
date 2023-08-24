@@ -67,30 +67,31 @@ const Image = styled.img`
 `
 
 const Left = styled.div`
-    margin: 0 30px;
-    padding-top: 20px;
-    width: 3.5vw;
+    margin: 0 10px;
+    padding-top: 10px;
+    width: 6vw;
     height: 100%;
     display: flex;
     flex-direction: column;
     gap: 15px;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-evenly;
 
     img {
         width: 3.5vw;
         height: 3.5vw;
         border-radius: 50%;
     }
+
     @media (max-width: 768px) {
-    width: 10vw;
-    img {
-    width: 5vh;
-    height: 5vh;
-    gap: 5px;
-    padding-top: 5px;
-}
-}
+        width: 10vw;
+        img {
+            width: 5vh;
+            height: 5vh;
+            gap: 5px;
+            padding-top: 5px;
+        }
+    }
 `
 
 const Right = styled.div`

@@ -26,17 +26,17 @@ export default function CommentCard({ comment, userName }) {
                 borderRadius='50%'
             />
 
-            <Box ml={15}>
+            <Flex ml={15} h='40px' flexDir='column' justifyContent='flex-start'>
                 <Flex flexWrap='wrap' alignItems='center' justifyContent='flex-start'>
                     <Text color='#F3F3F3' fontWeight={700}>{comment.userName}</Text>
                     {subtitle ? (
-                        <Text color='#565656' ml={5}>{subtitle}</Text>
+                        <Text color='#565656' ml={2}>{subtitle}</Text>
                     ) : (
                         null
                     )}
                 </Flex>
-                <Text color='#ACACAC' mt={5}>{comment.comment}</Text>
-            </Box>
+                <Text color='#ACACAC'>{comment.comment}</Text>
+            </Flex>
             <Spacer />
         </Flex>
     )

@@ -68,7 +68,7 @@ export default function CommentsText({ post }) {
                         h='40px'
                         borderRadius='50%'
                     />
-                    <FormControl w='92%'>
+                    <FormControl w='92%' ml={15}>
 
 
                         <InputGroup>
@@ -96,6 +96,10 @@ export default function CommentsText({ post }) {
                                     type="submit"
                                     onClick={handleSubmit}
                                     isLoading={isLoading}
+                                    size={20}
+                                    _hover={{
+                                        bg: 'none'
+                                    }}
                                 >
                                     <FiSend size={20} color="white" />
                                 </Button>
