@@ -83,7 +83,7 @@ export default function UserPage() {
                         {allPosts === null ? (
                             <TitleSC2>O usuário não possui publicações</TitleSC2>
                         ) : (
-                            allPosts.map(post => (<PostCard  post={post} />))
+                            allPosts.map(post => (<PostCard key={post.id} post={post} />))
                         )}
                     </PostContainerSC>
                     <Trending />
