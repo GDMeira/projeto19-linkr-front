@@ -54,6 +54,7 @@ export default function HomePage() {
         } catch (error) {
             console.error(error);
             alert("An error occured while trying to fetch the posts, please refresh the page")
+            setLoading(false)
         }
     }
 
