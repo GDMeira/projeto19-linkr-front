@@ -7,6 +7,9 @@ import UserContext from "../../contexts/UserContext";
 import { getPosts, newPost } from "../../Services/api";
 import Trending from "../../components/Trending";
 import { ThreeDots } from "react-loader-spinner"
+import axios from "axios";
+
+
 
 export default function HomePage() {
     const { user } = useContext(UserContext)
@@ -16,6 +19,8 @@ export default function HomePage() {
     const [allPosts, setAllPosts] = useState(undefined)
     const [loading, setLoading] = useState(false)
     const [loadingPost, setLoadingPost] = useState(false)
+
+    
 
     useEffect(() => {
          const fetchData = () => {
@@ -60,11 +65,13 @@ export default function HomePage() {
                 setLoading(false)
       })
         .catch((error) => {
-            console.error(error);
-            alert('An error occurred while trying to fetch the posts, please refresh the page');    
+            setLoading(false)
+            alert('An error occurred while trying to fetch the posts, please refresh the page1');    
         })
         });
-        promise.catch(err => alert("An error occured while trying to fetch the posts, please refresh the page"));
+        promise.catch(err => {
+            setLoading(false)
+            alert("An error occured while trying to fetch the posts, please refresh the page2")});
     }
 
     return (
@@ -105,7 +112,7 @@ export default function HomePage() {
                             </Right>
                         </NewPostContainer>
 
-                        {allPosts?.length < 1 || !allPosts ? (
+                        {allPosts == undefined ? (
                             <p data-test="message" >Ainda Não Existe serviço disponível</p>
                         ) : (
                             allPosts.map(post => (<PostCard key={post.id} post={post} />))
@@ -190,6 +197,9 @@ const Right = styled.div`
         border: none;
         border-radius: 5px;
         background: #1877F2;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         font-size: 20px;
         font-weight: 600;
         color: #fff;
