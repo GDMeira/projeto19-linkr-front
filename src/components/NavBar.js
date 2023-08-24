@@ -15,7 +15,6 @@ export default function NavBar({ intervalId }) {
     const [arrow, setArrow] = useState(false)
     const navigate = useNavigate()
     const { user, setUser } = useContext(UserContext)
-    console.log(user.image)
 
     function arrowChange() {
         if (!arrow) {

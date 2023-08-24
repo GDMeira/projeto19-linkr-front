@@ -28,7 +28,6 @@ export function getPostsByUserId(id, token) {
   const config = createConfig(token);
   console.log(config)
   const promise = axios.get(`${BASE_URL}/user/${id}`, config)
-  console.log(promise)
   return promise
 }
 
@@ -48,4 +47,21 @@ export function postDelete(postId, token) {
   const config = createConfig(token);
   const promise = axios.delete(`${BASE_URL}/posts/${postId}`, config)
   return promise
+}
+
+export function followUser(id, token) {
+  const config = createConfig(token);
+  const promise = axios.post(`${BASE_URL}/users/${id}/follow`, {}, config)
+  return promise
+}
+
+export function getTrendings(token, setTrending) {
+  axios.get(`${BASE_URL}/trending`, createConfig(token))
+    .then((res) => {
+      setTrending(res.data);
+    })
+    .catch((err) => {
+      alert(err.response.data.message);
+      console.log(err);
+    });
 }
