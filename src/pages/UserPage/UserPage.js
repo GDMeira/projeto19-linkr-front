@@ -22,7 +22,6 @@ export default function UserPage() {
 
     useEffect(() => {
         setLoading(true)
-        console.log(user.token)
         const fetchData = () => {
             getPostsByUserId( id, user.token)
                 .then(answer => {
@@ -80,7 +79,6 @@ export default function UserPage() {
                         {allPosts === null ? (
                             <TitleSC2>O usuário não possui publicações</TitleSC2>
                         ) : (
-                            console.log(allPosts),
                             allPosts.map(post => (<PostCard  post={post} />))
                         )}
                     </PostContainerSC>
