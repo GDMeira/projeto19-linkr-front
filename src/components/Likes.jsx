@@ -57,7 +57,7 @@ export default function Likes({ likers, postId }) {
     }
 
     return (
-        <Flex direction="column" w='100%' h="6vh" align='center' justifyContent='space-between'>
+        <Flex direction="column" align='center'>
             <Button data-test="like-btn" bg="none" onClick={toggleLike} >
                 {states.liked ? (
                     <AiFillHeart color="red" size={30} />

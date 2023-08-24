@@ -3,12 +3,13 @@ import React from "react";
 import PostText from "./PostText";
 import Likes from "./Likes";
 import { useNavigate } from "react-router-dom";
+import CommentsNumber from "./CommentsNumber";
 
 
 
 export default function PostCard({ post }) {
-    let {id, url, userId, linkTitle, linkDescription, linkImage, postDescription, pictureUrl, userName, likers } = post
-    
+    let {id, url, userId, linkTitle, linkDescription, linkImage, postDescription, pictureUrl, userName, likers, comments } = post
+
     if(!linkImage) linkImage = "https://lightwidget.com/wp-content/uploads/localhost-file-not-found.jpg";
 
     function goToUrl(link) {
@@ -27,6 +28,7 @@ export default function PostCard({ post }) {
             <Left>
              <img onClick={goToUserPage} src={pictureUrl} alt="foto do criador" /> 
                 <Likes likers={likers} postId={id}/>
+                <CommentsNumber comments={comments} postId={id}/>
             </Left>
             <Right>
                <h1 onClick={goToUserPage} data-test="username"><strong>{userName}</strong></h1> 
@@ -68,7 +70,7 @@ const Left = styled.div`
     flex-direction: column;
     gap: 15px;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: space-between;
 
     img {
         width: 3.5vw;
@@ -80,6 +82,8 @@ const Left = styled.div`
     img {
     width: 5vh;
     height: 5vh;
+    gap: 5px;
+    padding-top: 5px;
 }
 }
 `
