@@ -7,21 +7,21 @@ function createConfig(token) {
 }
 
 export function getPosts(token) {
-    const config = createConfig(token);
+  const config = createConfig(token);
 
-    const promise = axios.get(`${BASE_URL}/home`, config)
+  const promise = axios.get(`${BASE_URL}/home`, config)
 
-    return promise
+  return promise
 }
 
 export function newPost(body, token) {
-    const config = createConfig(token);
-    
-    const {link, postDescription} = body
+  const config = createConfig(token);
 
-    const promise = axios.post(`${BASE_URL}/home`,{link, postDescription}, config)
+  const { link, postDescription } = body
 
-    return promise
+  const promise = axios.post(`${BASE_URL}/home`, { link, postDescription }, config)
+
+  return promise
 }
 
 export function getPostsByUserId(id, token) {
@@ -37,8 +37,20 @@ export function searchUser(search, token) {
   return promise
 }
 
+<<<<<<< HEAD
 export function followUser(id, token) {
   const config = createConfig(token);
   const promise = axios.post(`${BASE_URL}/users/${id}/follow`, {}, config)
   return promise
+=======
+export function getTrendings(token, setTrending) {
+  axios.get(`${BASE_URL}/trending`, createConfig(token))
+    .then((res) => {
+      setTrending(res.data);
+    })
+    .catch((err) => {
+      alert(err.response.data.message);
+      console.log(err);
+    });
+>>>>>>> main
 }

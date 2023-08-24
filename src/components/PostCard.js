@@ -2,7 +2,6 @@ import styled from "styled-components";
 import React from "react";
 import PostText from "./PostText";
 import Likes from "./Likes";
-import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 
@@ -124,7 +123,7 @@ const Right = styled.div`
 
 
 const Linkr = styled.div`
-    max-width: 33vw;
+    width: 33vw;
     height: 16vh;
     border: 1px solid #4D4D4D;
     border-radius: 16px;

@@ -1,61 +1,55 @@
 
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import NavBar from "../../components/NavBar"
 import PostCard from "../../components/PostCard";
 import styled from "styled-components";
-import UserContext from "../../contexts/UserContext";
 import { getPosts, newPost } from "../../Services/api";
 import Trending from "../../components/Trending";
 import { ThreeDots } from "react-loader-spinner"
+<<<<<<< HEAD
 import axios from "axios";
 
 
+=======
+import { useAllContexts } from "../../hooks/useAllContexts";
+>>>>>>> main
 
 export default function HomePage() {
-    const { user } = useContext(UserContext)
+    const { user, allPosts, setAllPosts } = useAllContexts()
 
     const [link, setLink] = useState('')
     const [description, setDescription] = useState('')
-    const [allPosts, setAllPosts] = useState(undefined)
     const [loading, setLoading] = useState(false)
     const [loadingPost, setLoadingPost] = useState(false)
 
     
 
     useEffect(() => {
-         const fetchData = () => {
-             getPosts(user.token)
-                 .then(answer => {
-                     setAllPosts(answer.data);
-                     if (loadingPost) setLoadingPost(false)
-                 })
-                 .catch(error => alert("An error occured while trying to fetch the posts, please refresh the page"));
-         };
+        function fetchData() {
+            getPosts(user.token)
+                .then(answer => {
+                    setAllPosts(answer.data);
+                    setLoadingPost(false)
+                })
+                .catch(error => alert("An error occured while trying to fetch the posts, please refresh the page"));
+        };
 
-         if (!allPosts) setLoadingPost(true);
-         fetchData();
+        if (!allPosts) setLoadingPost(true);
+        fetchData();
 
-         const intervalId = setInterval(fetchData, 10000);
+        const intervalId = setInterval(fetchData, 10000);
 
-         return () => {
-             clearInterval(intervalId);
-         };
-     });
-
-    // useEffect(() => {
-    //     getPosts(user.token)
-    //         .then(answer => {
-    //             setAllPosts(answer.data);
-    //         })
-    //         .catch(error => alert("An error occured while trying to fetch the posts, please refresh the page"));
-    // });
+        return () => {
+            clearInterval(intervalId);
+        };
+    }, []);
 
 
-    function postLinkr(e) {
+    async function postLinkr(e) {
         e.preventDefault();
         setLoading(true)
-        const promise = newPost({ link, postDescription: description }, user.token);
 
+<<<<<<< HEAD
         promise.then(response => {
             setLink('')
             setDescription('')
@@ -72,6 +66,20 @@ export default function HomePage() {
         promise.catch(err => {
             setLoading(false)
             alert("An error occured while trying to fetch the posts, please refresh the page2")});
+=======
+        try {
+            await newPost({ link, postDescription: description }, user.token);
+            console.log('aoba')
+            setLink('');
+            setDescription('');
+            const answer = await getPosts(user.token);
+            setAllPosts(answer.data);
+            setLoading(false)
+        } catch (error) {
+            console.error(error);
+            alert("An error occured while trying to fetch the posts, please refresh the page")
+        }
+>>>>>>> main
     }
 
     return (
@@ -82,36 +90,40 @@ export default function HomePage() {
                 <TitleSC>timeline</TitleSC>
 
                 {loadingPost ? (
-                <LoadingContainer>
-                    <ThreeDots color="#FFF" height={80} width={80} />
-                </LoadingContainer>
-            ) : (
+                    <LoadingContainer>
+                        <ThreeDots color="#FFF" height={80} width={80} />
+                    </LoadingContainer>
+                ) : (
 
-                <ContainerSC>
-                    <PostContainerSC>
-                        <NewPostContainer data-test="publish-box">
-                            <Left>
-                                <img src={user.image} alt='user'></img>
-                            </Left>
-                            <Right>
-                                <h1>What are you going to share today?</h1>
-                                <form onSubmit={postLinkr}>
-                                    <input placeholder="http://..." data-test="link" type="texy" value={link} onChange={(e) => setLink(e.target.value)} />
-                                    <input placeholder="Awesome article about #javascript" data-test="description" type="text" value={description} onChange={(e) => setDescription(e.target.value)} />
-                                    <button data-test="publish-btn" disabled={loading} type="submit" value="Submit">{!loading ? 'Publish' : <ThreeDots
-                                        color="#FFFFFF"
-                                        height="30"
-                                        width="60"
-                                        ariaLabel="three-dots-loading"
-                                        wrapperStyle={{}}
-                                        wrapperClassName=""
-                                        visible={true}
-                                    />}
-                                    </button>
-                                </form>
-                            </Right>
-                        </NewPostContainer>
+                    <ContainerSC>
+                        <PostContainerSC>
+                            <NewPostContainer data-test="publish-box">
+                                <Left>
+                                    <img src={user.image} alt='user'></img>
+                                </Left>
+                                <Right>
+                                    <h1>What are you going to share today?</h1>
+                                    <form onSubmit={postLinkr}>
+                                        <input placeholder="http://..." data-test="link" type="texy" value={link} onChange={(e) => setLink(e.target.value)} />
+                                        <input placeholder="Awesome article about #javascript" data-test="description" type="text" value={description} onChange={(e) => setDescription(e.target.value)} />
+                                        <button 
+                                            data-test="publish-btn" 
+                                            disabled={loading} type="submit" 
+                                            value="Submit">{!loading ? 'Publish' : <ThreeDots
+                                            color="#FFFFFF"
+                                            height="30"
+                                            width="60"
+                                            ariaLabel="three-dots-loading"
+                                            wrapperStyle={{}}
+                                            wrapperClassName=""
+                                            visible={true}
+                                        />}
+                                        </button>
+                                    </form>
+                                </Right>
+                            </NewPostContainer>
 
+<<<<<<< HEAD
                         {allPosts == undefined ? (
                             <p data-test="message" >Ainda Não Existe serviço disponível</p>
                         ) : (
@@ -121,6 +133,17 @@ export default function HomePage() {
                     <Trending />
                 </ContainerSC>
             )}
+=======
+                            {allPosts?.length < 1 || !allPosts ? (
+                                <p data-test="message" >Ainda Não Existe serviço disponível</p>
+                            ) : (
+                                allPosts.map(post => (<PostCard key={post.id} post={post} />))
+                            )}
+                        </PostContainerSC>
+                        <Trending />
+                    </ContainerSC>
+                )}
+>>>>>>> main
             </PageSC>
         </>
     )

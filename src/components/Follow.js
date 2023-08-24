@@ -17,10 +17,6 @@ function Follow({ Followers, FollowingId }) {
     async function toggleFollow() {
         setLoading(true);
 
-       if (user.id === FollowingId) {
-           alert("You can't follow yourself");
-           setLoading(false);
-           return;}
 
         try {
             
@@ -76,6 +72,7 @@ const ButtonFollow = styled.button`
     text-align: center;
     margin-top: 125px;
     margin-bottom: 40px;
+    
 `;
 
 export default Follow;

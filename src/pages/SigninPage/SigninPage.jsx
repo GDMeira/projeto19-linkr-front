@@ -26,15 +26,15 @@ export default function SignInPage() {
         axios.post(`${API_URL}/signin`, dadosLogin)
           .then(resposta => {
             
-            const { userName, token, image, id } = resposta.data
-            setUser({ userName, token, image, id })
-            localStorage.setItem('user', JSON.stringify({ userName, token, image }))
+            const { id, userName, token, image} = resposta.data
+            setUser({ id, userName, token, image, id })
+            localStorage.setItem('user', JSON.stringify({ id, userName, token, image }))
             navigate('/timeline')
           })
           .catch((error) => {
-            //console.error(error.response.data)
+            console.error()
             setBtn(false)
-            alert(error.response.message)
+            alert(error.response.data)
           })
       }else{
         setBtn(false)
