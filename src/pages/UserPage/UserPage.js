@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import NavBar from "../../components/NavBar"
 import PostCard from "../../components/PostCard";
 import styled from "styled-components";
+import Follow from "../../components/Follow";
 import UserContext from "../../contexts/UserContext";
 import { getPostsByUserId, newPost } from "../../Services/api";
 import Trending from "../../components/Trending";
@@ -18,6 +19,7 @@ export default function UserPage() {
     const [description, setDescription] = useState('')
     let [userInfo, setUserInfo] = useState([[]])
     let [allPosts, setAllPosts] = useState(null)
+    const [followers, setFollowers] = useState([])
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
@@ -30,6 +32,7 @@ export default function UserPage() {
                     setLoading(false)
                     console.log(all)
                     setAllPosts(answer.data.posts);
+                    setFollowers(answer.data.followers)
                 })
                 .catch(error => alert("An error occured while trying to fetch the posts, please refresh the page"));
         };
@@ -61,17 +64,18 @@ export default function UserPage() {
             ) : (
                     <NewPostContainer>
                 
+                    <ContainerMid>
+
                 <TitleSC>
                     <Flex>
                     <img src={userInfo.pictureUrl} alt='user'></img>
                     </Flex>
-                    
                     {userInfo.userName}'s posts 
-                
-                
-
                 </TitleSC>
+
+                {user.id == id ? null :  <Follow Followers={followers} FollowingId={id} />}
                 
+                </ContainerMid>
 
                 <ContainerSC>
                     <PostContainerSC>
@@ -92,6 +96,42 @@ export default function UserPage() {
         </>
     )
 }
+
+const ContainerMid = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 65vw;
+
+    @media (max-width: 768px) {
+        width: 95vw;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+    }
+`;
+
+const ButtonFollow = styled.button`
+    width: 112px;
+    height: 31px;
+    background: #1877F2;
+    border-radius: 5px;
+    border: none;
+    color: #FFF;
+    font-family: Lato, sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 17px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-top: 125px;
+    margin-bottom: 40px;
+    `
+
+
 
 const LoadingContainer = styled.div`
     display: flex;
