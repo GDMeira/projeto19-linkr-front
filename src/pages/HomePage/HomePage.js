@@ -6,13 +6,7 @@ import styled from "styled-components";
 import { getPosts, newPost } from "../../Services/api";
 import Trending from "../../components/Trending";
 import { ThreeDots } from "react-loader-spinner"
-<<<<<<< HEAD
-import axios from "axios";
-
-
-=======
 import { useAllContexts } from "../../hooks/useAllContexts";
->>>>>>> main
 
 export default function HomePage() {
     const { user, allPosts, setAllPosts } = useAllContexts()
@@ -49,24 +43,6 @@ export default function HomePage() {
         e.preventDefault();
         setLoading(true)
 
-<<<<<<< HEAD
-        promise.then(response => {
-            setLink('')
-            setDescription('')
-            getPosts(user.token)
-            .then((answer) => {
-                setAllPosts(answer.data);
-                setLoading(false)
-      })
-        .catch((error) => {
-            setLoading(false)
-            alert('An error occurred while trying to fetch the posts, please refresh the page1');    
-        })
-        });
-        promise.catch(err => {
-            setLoading(false)
-            alert("An error occured while trying to fetch the posts, please refresh the page2")});
-=======
         try {
             await newPost({ link, postDescription: description }, user.token);
             console.log('aoba')
@@ -79,7 +55,6 @@ export default function HomePage() {
             console.error(error);
             alert("An error occured while trying to fetch the posts, please refresh the page")
         }
->>>>>>> main
     }
 
     return (
@@ -123,7 +98,6 @@ export default function HomePage() {
                                 </Right>
                             </NewPostContainer>
 
-<<<<<<< HEAD
                         {allPosts == undefined ? (
                             <p data-test="message" >Ainda Não Existe serviço disponível</p>
                         ) : (
@@ -133,17 +107,6 @@ export default function HomePage() {
                     <Trending />
                 </ContainerSC>
             )}
-=======
-                            {allPosts?.length < 1 || !allPosts ? (
-                                <p data-test="message" >Ainda Não Existe serviço disponível</p>
-                            ) : (
-                                allPosts.map(post => (<PostCard key={post.id} post={post} />))
-                            )}
-                        </PostContainerSC>
-                        <Trending />
-                    </ContainerSC>
-                )}
->>>>>>> main
             </PageSC>
         </>
     )
