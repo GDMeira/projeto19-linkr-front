@@ -65,3 +65,7 @@ export function getTrendings(token, setTrending) {
       console.log(err);
     });
 }
+
+export function postComment(token, postId, comment) {
+  return axios.post(`${BASE_URL}/comments/${postId}`, {comment}, createConfig(token))
+}

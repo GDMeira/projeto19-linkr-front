@@ -128,7 +128,7 @@ const LoadingContainer = styled.div`
 
 
 const Left = styled.div`
-    margin: 20px 30px;
+    margin: 20px 0 0 25px;
     width: 3.5vw;
     img {
         width: 3.5vw;
@@ -142,11 +142,10 @@ const Left = styled.div`
 
 const Right = styled.div`
     width: 37vw;
-    height: 16vh;
     margin-top: 2vh;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-evenly;
 
     @media (max-width: 768px) {
     width: 90vw;
@@ -193,14 +192,13 @@ const Right = styled.div`
         cursor: pointer;
         width: 112px;
         height: 45px;
-        padding: 12px;
     }
 `
 
 const NewPostContainer = styled.div`
     background: #FFFFFF;
     width: 100%;
-    height: 209px;
+    height: 27vh;
     border-radius: 16px;
     display: flex;
     justify-content: space-evenly;
