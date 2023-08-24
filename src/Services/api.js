@@ -7,34 +7,39 @@ function createConfig(token) {
 }
 
 export function getPosts(token) {
-  const config = createConfig(token);
+    const config = createConfig(token);
 
-  const promise = axios.get(`${BASE_URL}/home`, config)
+    const promise = axios.get(`${BASE_URL}/home`, config)
 
-  return promise
+    return promise
 }
 
 export function newPost(body, token) {
-  const config = createConfig(token);
+    const config = createConfig(token);
+    
+    const {link, postDescription} = body
 
-  const { link, postDescription } = body
+    const promise = axios.post(`${BASE_URL}/home`,{link, postDescription}, config)
 
-  const promise = axios.post(`${BASE_URL}/home`, { link, postDescription }, config)
-
-  return promise
+    return promise
 }
 
 export function getPostsByUserId(id, token) {
   const config = createConfig(token);
   console.log(config)
   const promise = axios.get(`${BASE_URL}/user/${id}`, config)
-  console.log(promise)
   return promise
 }
 
 export function searchUser(search, token) {
   const config = createConfig(token);
   const promise = axios.get(`${BASE_URL}/search?username=${search}`, config)
+  return promise
+}
+
+export function followUser(id, token) {
+  const config = createConfig(token);
+  const promise = axios.post(`${BASE_URL}/users/${id}/follow`, {}, config)
   return promise
 }
 

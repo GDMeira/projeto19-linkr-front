@@ -96,7 +96,7 @@ const Left = styled.div`
 const Right = styled.div`
     padding-right: 20px;
     width: 37vw;
-    height: 25vh;
+    height: 23vh;
     margin: 2vh 0;
     display: flex;
     flex-direction: column;
@@ -135,6 +135,7 @@ const Linkr = styled.div`
     height: 16vh;
     border: 1px solid #4D4D4D;
     border-radius: 16px;
+    margin-top: 5px;
     display: flex;
     justify-content: space-between;
     cursor: pointer;

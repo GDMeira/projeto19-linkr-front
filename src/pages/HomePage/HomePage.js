@@ -16,6 +16,8 @@ export default function HomePage() {
     const [loading, setLoading] = useState(false)
     const [loadingPost, setLoadingPost] = useState(false)
 
+    
+
     useEffect(() => {
         function fetchData() {
             getPosts(user.token)
@@ -52,6 +54,7 @@ export default function HomePage() {
         } catch (error) {
             console.error(error);
             alert("An error occured while trying to fetch the posts, please refresh the page")
+            setLoading(false)
         }
     }
 
@@ -96,15 +99,15 @@ export default function HomePage() {
                                 </Right>
                             </NewPostContainer>
 
-                            {allPosts?.length < 1 || !allPosts ? (
-                                <p data-test="message" >Ainda Não Existe serviço disponível</p>
-                            ) : (
-                                allPosts.map(post => (<PostCard key={post.id} post={post} />))
-                            )}
-                        </PostContainerSC>
-                        <Trending />
-                    </ContainerSC>
-                )}
+                        {allPosts == undefined ? (
+                            <p data-test="message" >Ainda Não Existe serviço disponível</p>
+                        ) : (
+                            allPosts.map(post => (<PostCard key={post.id} post={post} />))
+                        )}
+                    </PostContainerSC>
+                    <Trending />
+                </ContainerSC>
+            )}
             </PageSC>
         </>
     )
@@ -181,6 +184,9 @@ const Right = styled.div`
         border: none;
         border-radius: 5px;
         background: #1877F2;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         font-size: 20px;
         font-weight: 600;
         color: #fff;

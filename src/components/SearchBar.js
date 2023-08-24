@@ -14,6 +14,7 @@ function SearchBar() {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [isFollowing, setIsFollowing] = useState(null);
   const { user } = useContext(UserContext)
     const navigate = useNavigate()
 
@@ -33,6 +34,7 @@ function SearchBar() {
         
       try {
         const response = await searchUser(newSearchTerm, user.token);
+        console.log(response.data)
         setSearchResults(response.data);
         setLoading(false);
       } catch (error) {
@@ -65,6 +67,11 @@ function SearchBar() {
               <SearchResult data-test="user-search" onClick={() => goToUserPage(result.id)} key={result.id}>
                 <ProfileImage src={result.pictureUrl} alt="Profile" />
                 <Name>{result.userName}</Name>
+                {result.isFollowing !== null ? (
+                    <SpanFollow>• following</SpanFollow>
+                ) : (
+                  null
+                )}
               </SearchResult>
             ))}
           </ResultsDropdown>
@@ -73,6 +80,16 @@ function SearchBar() {
     </SearchContainer>
   );
 }
+
+const SpanFollow = styled.span`
+  color: #C5C5C5;
+  font-family: Lato;
+  font-size: 19px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-left: 10px;
+`;
 
 const SearchContainer = styled.div`
   position: relative;
