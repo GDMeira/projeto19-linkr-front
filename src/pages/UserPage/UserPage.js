@@ -2,7 +2,7 @@
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import NavBar from "../../components/NavBar"
-import PostCard from "../../components/PostCard";
+import UserPostCard from "../../components/UserPostCard";
 import styled from "styled-components";
 import Follow from "../../components/Follow";
 import UserContext from "../../contexts/UserContext";
@@ -83,7 +83,7 @@ export default function UserPage() {
                         {allPosts === null ? (
                             <TitleSC2>O usuário não possui publicações</TitleSC2>
                         ) : (
-                            allPosts.map(post => (<PostCard  post={post} />))
+                            allPosts.map(post => (<UserPostCard  post={post} />))
                         )}
                     </PostContainerSC>
                     <Trending />

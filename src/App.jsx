@@ -8,6 +8,8 @@ import { useState } from "react";
 import UserContext from "./contexts/UserContext";
 import PostsContext from "./contexts/PostsContext";
 import UserPage from "./pages/UserPage/UserPage";
+import { ChakraProvider } from "@chakra-ui/react";
+
 
 
 function App() {
@@ -20,15 +22,17 @@ function App() {
       <BrowserRouter>
         <UserContext.Provider value={{ user, setUser }}>
           <PostsContext.Provider value={{ trending, setTrending, allPosts, setAllPosts }}>
-            <Routes>
-              <Route path="/" element={<SignInPage />} />
-              <Route path='/timeline' element={<HomePage />} />
-              <Route path="/sign-up" element={<SignUpPage />} />
-              <Route path="/hashtag/:hashtag" element={<HashtagPage />} />
-              <Route path="/user/:id" element={<UserPage />} />
+            <ChakraProvider>
+              <Routes>
+                <Route path="/" element={<SignInPage />} />
+                <Route path='/timeline' element={<HomePage />} />
+                <Route path="/sign-up" element={<SignUpPage />} />
+                <Route path="/hashtag/:hashtag" element={<HashtagPage />} />
+                <Route path="/user/:id" element={<UserPage />} />
 
 
-            </Routes>
+              </Routes>
+            </ChakraProvider>
           </PostsContext.Provider>
         </UserContext.Provider>
       </BrowserRouter>
