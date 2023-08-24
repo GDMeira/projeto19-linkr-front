@@ -42,3 +42,14 @@ export function followUser(id, token) {
   const promise = axios.post(`${BASE_URL}/users/${id}/follow`, {}, config)
   return promise
 }
+
+export function getTrendings(token, setTrending) {
+  axios.get(`${BASE_URL}/trending`, createConfig(token))
+    .then((res) => {
+      setTrending(res.data);
+    })
+    .catch((err) => {
+      alert(err.response.data.message);
+      console.log(err);
+    });
+}
