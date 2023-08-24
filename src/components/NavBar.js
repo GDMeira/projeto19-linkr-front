@@ -107,6 +107,7 @@ const Picture = styled.div`
     justify-content: center;
     align-items: center;
     img{
+    cursor: pointer;
     width: 53px;
     height: 53px;
     border-radius: 50%;

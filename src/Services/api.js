@@ -37,3 +37,15 @@ export function searchUser(search, token) {
   const promise = axios.get(`${BASE_URL}/search?username=${search}`, config)
   return promise
 }
+
+export function postEdit(description, postId, token) {
+  const config = createConfig(token);
+  const promise = axios.put(`${BASE_URL}/posts/${postId}`, {description}, config)
+  return promise
+}
+
+export function postDelete(postId, token) {
+  const config = createConfig(token);
+  const promise = axios.delete(`${BASE_URL}/posts/${postId}`, config)
+  return promise
+}

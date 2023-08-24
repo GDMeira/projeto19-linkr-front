@@ -7,6 +7,8 @@ import SignUpPage from "./pages/SignUpPage/SignUpPage";
 import { useState } from "react";
 import UserContext from "./contexts/UserContext";
 import UserPage from "./pages/UserPage/UserPage";
+import { ChakraProvider } from "@chakra-ui/react";
+
 
 
 function App() {
@@ -16,15 +18,16 @@ function App() {
     <PagesContainer>
     <BrowserRouter>
       <UserContext.Provider value={{ user, setUser }}>
+      <ChakraProvider>
         <Routes>
         <Route path="/" element={<SignInPage />} />
         <Route path ='/timeline' element={<HomePage />}/>
         <Route path="/sign-up" element={<SignUpPage />} /> 
         <Route path="/hashtag/:hashtag" element={<HashtagPage />} />
         <Route path="/user/:id" element={<UserPage />} />
-         
-        
+                 
         </Routes>
+        </ChakraProvider>
       </UserContext.Provider>
     </BrowserRouter>
   </PagesContainer>
