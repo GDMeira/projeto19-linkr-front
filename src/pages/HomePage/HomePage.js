@@ -7,14 +7,16 @@ import { getPosts, newPost } from "../../Services/api";
 import Trending from "../../components/Trending";
 import { ThreeDots } from "react-loader-spinner"
 import { useAllContexts } from "../../hooks/useAllContexts";
+import { navigate } from "ionicons/icons";
+import { useNavigate } from "react-router-dom";
 
 export default function HomePage() {
     const { user, allPosts, setAllPosts } = useAllContexts()
-
     const [link, setLink] = useState('')
     const [description, setDescription] = useState('')
     const [loading, setLoading] = useState(false)
     const [loadingPost, setLoadingPost] = useState(false)
+    const navigate = useNavigate();
 
     
 
@@ -25,7 +27,13 @@ export default function HomePage() {
                     setAllPosts(answer.data);
                     setLoadingPost(false)
                 })
-                .catch(error => alert("An error occured while trying to fetch the posts, please refresh the page"));
+                .catch(error => {
+                    if (error.response.status === 401) {
+                        navigate('/');
+                        return;
+                    }
+                    alert("An error occured while trying to fetch the posts, please refresh the page")
+                });
         };
 
         if (!allPosts) setLoadingPost(true);
@@ -52,7 +60,6 @@ export default function HomePage() {
             setAllPosts(answer.data);
             setLoading(false)
         } catch (error) {
-            console.error(error);
             alert("An error occured while trying to fetch the posts, please refresh the page")
             setLoading(false)
         }
