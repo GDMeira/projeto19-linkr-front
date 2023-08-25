@@ -2,14 +2,10 @@ import styled from "styled-components";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import PostText from "./PostText";
 import Likes from "./Likes";
-import { Link } from "react-router-dom";
 import { trashOutline, pencilOutline } from "ionicons/icons";
 import { IonIcon } from '@ionic/react';
 import { useNavigate } from "react-router-dom";
-import {
-    Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, FormControl, FormLabel, FormHelperText,
-    Input, Button, useDisclosure,
-} from "@chakra-ui/react"
+import {Modal,ModalOverlay,ModalContent,ModalHeader,ModalFooter, Button, useDisclosure,} from "@chakra-ui/react"
 import UserContext from "../contexts/UserContext";
 import { postEdit, postDelete } from "../Services/api";
 import CommentsText from "./CommentsText";

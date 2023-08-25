@@ -27,27 +27,26 @@ export default function SignInPage() {
       email: emailLogin,
       password: senhaLogin
     }
-    if (senhaLogin !== null && senhaLogin !== '' && emailLogin !== null && emailLogin !== '') {
+    if(senhaLogin !== null && senhaLogin !== '' && emailLogin !== null && emailLogin !== ''){
 
-      axios.post(`${API_URL}/signin`, dadosLogin)
-        .then(resposta => {
-
-          const { id, userName, token, image } = resposta.data
-          setUser({ id, userName, token, image, id })
-          localStorage.setItem('user', JSON.stringify({ id, userName, token, image }))
-          navigate('/timeline')
-        })
-        .catch((error) => {
-          console.error()
-          setBtn(false)
-          alert(error.response.data)
-        })
-    } else {
-      setBtn(false)
-      alert('Complete os dados ou se inscreva')
+        axios.post(`${API_URL}/signin`, dadosLogin)
+          .then(resposta => {
+            
+            const { id, userName, token, image} = resposta.data
+            setUser({ id, userName, token, image})
+            localStorage.setItem('user', JSON.stringify({ id, userName, token, image }))
+            navigate('/timeline')
+          })
+          .catch((error) => {
+            console.error()
+            setBtn(false)
+            alert(error.response.data)
+          })
+      }else{
+        setBtn(false)
+        alert('Complete os dados ou se inscreva') 
+      }
     }
-  }
-
 
   return (
 

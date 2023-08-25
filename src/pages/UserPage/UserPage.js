@@ -6,7 +6,7 @@ import UserPostCard from "../../components/UserPostCard";
 import styled from "styled-components";
 import Follow from "../../components/Follow";
 import UserContext from "../../contexts/UserContext";
-import { getPostsByUserId, newPost } from "../../Services/api";
+import { getPostsByUserId} from "../../Services/api";
 import Trending from "../../components/Trending";
 import { ThreeDots } from "react-loader-spinner"
 import { all } from "axios";
@@ -15,8 +15,6 @@ export default function UserPage() {
     const { user } = useContext(UserContext)
     const {id} = useParams()
 
-    const [link, setLink] = useState('')
-    const [description, setDescription] = useState('')
     let [userInfo, setUserInfo] = useState([[]])
     let [allPosts, setAllPosts] = useState(null)
     const [followers, setFollowers] = useState([])
@@ -73,7 +71,7 @@ export default function UserPage() {
                     {userInfo.userName}'s posts 
                 </TitleSC>
 
-                {user.id == id ? null :  <Follow Followers={followers} FollowingId={id} />}
+                {user.id === id ? null :  <Follow Followers={followers} FollowingId={id} />}
                 
                 </ContainerMid>
 

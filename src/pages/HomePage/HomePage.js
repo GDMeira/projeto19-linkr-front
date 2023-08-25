@@ -7,8 +7,12 @@ import { getPosts, newPost, getFolloweds, getTrendings } from "../../Services/ap
 import Trending from "../../components/Trending";
 import { ThreeDots } from "react-loader-spinner"
 import { useAllContexts } from "../../hooks/useAllContexts";
-import { navigate } from "ionicons/icons";
+import useInterval from 'use-interval'
+import UserPostCard from "../../components/UserPostCard";
 import { useNavigate } from "react-router-dom";
+import { IonIcon } from '@ionic/react';
+import { reloadOutline } from "ionicons/icons";
+
 
 export default function HomePage() {
     const { user, allPosts, setAllPosts, setTrending } = useAllContexts()
@@ -17,16 +21,23 @@ export default function HomePage() {
     const [haveFollowed, setHaveFollowed] = useState(false)
     const [loading, setLoading] = useState(false)
     const [loadingPost, setLoadingPost] = useState(false)
-    const navigate = useNavigate();
+    const [count, setCount] = useState(0);
+    const [currentPosts, setCurrentPosts] = useState(0)
+    const [newPosts, setNewPosts] = useState(0)
 
+    useInterval(() => {
+        // Your custom logic here
+        getPosts(user.token).then(answer => {setCount(answer.data.length)})
+        .catch(error => alert("An error occured while trying to fetch the posts, please refresh the page"));
+
+        setNewPosts(count - currentPosts)
     
-            
+      }, 1000);
 
-    
+      const navigate = useNavigate();
 
-    useEffect(() => {
-        function fetchData() {
-            getFolloweds(user.token)
+      function fetchData() {
+        getFolloweds(user.token)
             .then(answer => {
                 if (answer.data.length > 0) {
                     
@@ -36,26 +47,27 @@ export default function HomePage() {
             })
             .catch(error => alert("An error occured while trying to fetch the posts, please refresh the page"));
 
-            getPosts(user.token)
-                .then(answer => {
-                    setAllPosts(answer.data);
-                    console.log(answer.data)
-                    setLoadingPost(false)
-                })
-                .catch(error => {
-                    if (error.response.status === 401) {
-                        localStorage.clear();
-                        navigate('/');
-                        return;
-                    }
-                    alert("An error occured while trying to fetch the posts, please refresh the page")
-                });
-        };
+        getPosts(user.token)
+            .then(answer => {
+                setAllPosts(answer.data);
+                setLoadingPost(false)
+                setCurrentPosts(answer.data.length)
+            })
+            .catch(error => {
+                if (error.response.status === 401) {
+                    localStorage.clear();
+                    navigate('/');
+                    return;
+                }
+                alert("An error occured while trying to fetch the posts, please refresh the page")
+            });
+    };
 
+    useEffect(() => {
         if (!allPosts) setLoadingPost(true);
         fetchData();
 
-        const intervalId = setInterval(fetchData, 10000);
+        const intervalId = setInterval(fetchData, 15000);
 
         return () => {
             clearInterval(intervalId);
@@ -121,11 +133,18 @@ export default function HomePage() {
                                     </form>
                                 </Right>
                             </NewPostContainer>
+                        {newPosts > 1 ? (
+                        <UpdateContainer> <button data-test='load-btn' onClick={fetchData}>{newPosts} new posts, load more!<IonIcon icon={reloadOutline} style={{ fontSize: '20px', color: 'white'}}/></button>
+                        </UpdateContainer>): ""}
+
+                        {/* <UpdateContainer display={newPosts > 1 ? "inline" : "none"}>
+                            <button>{newPosts} new posts, load more!   <IonIcon  icon={reloadOutline} style={{ fontSize: '20px', color: 'white'}}/></button>
+                        </UpdateContainer> */}
 
                         {!haveFollowed ? <TitleSC2 data-test='message'>You don't follow anyone yet. Search for new friends!</TitleSC2> : allPosts.length == 0 ? (
                             <TitleSC2 data-test='message' >No posts found from your friends</TitleSC2>
                         ) : (
-                            allPosts.map(post => (<PostCard key={post.id} post={post} />))
+                            allPosts.map(post => ((user.id === post.userId) ? <UserPostCard key={post.id} post={post} /> : <PostCard key={post.id} post={post} />))
                         )}
                     </PostContainerSC>
                     <Trending />
@@ -136,6 +155,27 @@ export default function HomePage() {
     )
 }
 
+const UpdateContainer = styled.div`
+
+margin: 15px 0;
+width: inherit;
+button {
+        outline: none;
+        border: none;
+        border-radius: 16px;
+        background: #1877F2;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 20px;
+        font-weight: 600;
+        color: #fff;
+        cursor: pointer;
+        width: inherit;
+        height: 61px;
+        padding: 12px;
+    }
+`
 const TitleSC2 = styled.div`
     color: #FFF;
     font-family: Oswald, monospace;
