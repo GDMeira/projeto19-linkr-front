@@ -15,7 +15,7 @@ export default function SignInPage() {
   const { user, setUser } = useContext(UserContext)
 
   useEffect(() => {
-    if (user.token) {
+    if (user?.token) {
       navigate('/timeline')
     }
   })
