@@ -7,6 +7,11 @@ import { getPosts, newPost } from "../../Services/api";
 import Trending from "../../components/Trending";
 import { ThreeDots } from "react-loader-spinner"
 import { useAllContexts } from "../../hooks/useAllContexts";
+import useInterval from 'use-interval'
+import UserPostCard from "../../components/UserPostCard";
+import { IonIcon } from '@ionic/react';
+import { reloadOutline } from "ionicons/icons";
+
 
 export default function HomePage() {
     const { user, allPosts, setAllPosts } = useAllContexts()
@@ -15,23 +20,34 @@ export default function HomePage() {
     const [description, setDescription] = useState('')
     const [loading, setLoading] = useState(false)
     const [loadingPost, setLoadingPost] = useState(false)
+    const [count, setCount] = useState(0);
+    const [currentPosts, setCurrentPosts] = useState(0)
+    const [newPosts, setNewPosts] = useState(0)
 
+    useInterval(() => {
+        // Your custom logic here
+        getPosts(user.token).then(answer => {setCount(answer.data.length)})
+        .catch(error => alert("An error occured while trying to fetch the posts, please refresh the page"));
+
+        setNewPosts(count - currentPosts)
     
+      }, 1000);
+
+      function fetchData() {
+        getPosts(user.token)
+            .then(answer => {
+                setAllPosts(answer.data);
+                setLoadingPost(false)
+                setCurrentPosts(answer.data.length)
+            })
+            .catch(error => alert("An error occured while trying to fetch the posts, please refresh the page"));
+    };
 
     useEffect(() => {
-        function fetchData() {
-            getPosts(user.token)
-                .then(answer => {
-                    setAllPosts(answer.data);
-                    setLoadingPost(false)
-                })
-                .catch(error => alert("An error occured while trying to fetch the posts, please refresh the page"));
-        };
-
         if (!allPosts) setLoadingPost(true);
         fetchData();
 
-        const intervalId = setInterval(fetchData, 10000);
+        const intervalId = setInterval(fetchData, 15000);
 
         return () => {
             clearInterval(intervalId);
@@ -98,11 +114,18 @@ export default function HomePage() {
                                     </form>
                                 </Right>
                             </NewPostContainer>
+                        {newPosts > 1 ? (
+                        <UpdateContainer> <button data-test='load-btn' onClick={fetchData}>{newPosts} new posts, load more!<IonIcon icon={reloadOutline} style={{ fontSize: '20px', color: 'white'}}/></button>
+                        </UpdateContainer>): ""}
 
-                        {allPosts == undefined ? (
+                        {/* <UpdateContainer display={newPosts > 1 ? "inline" : "none"}>
+                            <button>{newPosts} new posts, load more!   <IonIcon  icon={reloadOutline} style={{ fontSize: '20px', color: 'white'}}/></button>
+                        </UpdateContainer> */}
+
+                        {allPosts === undefined ? (
                             <p data-test="message" >Ainda Não Existe serviço disponível</p>
                         ) : (
-                            allPosts.map(post => (<PostCard key={post.id} post={post} />))
+                            allPosts.map(post => ((user.id === post.userId) ? <UserPostCard key={post.id} post={post} /> : <PostCard key={post.id} post={post} />))
                         )}
                     </PostContainerSC>
                     <Trending />
@@ -112,6 +135,28 @@ export default function HomePage() {
         </>
     )
 }
+
+const UpdateContainer = styled.div`
+
+margin: 15px 0;
+width: inherit;
+button {
+        outline: none;
+        border: none;
+        border-radius: 16px;
+        background: #1877F2;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 20px;
+        font-weight: 600;
+        color: #fff;
+        cursor: pointer;
+        width: inherit;
+        height: 61px;
+        padding: 12px;
+    }
+`
 
 const LoadingContainer = styled.div`
     display: flex;

@@ -27,7 +27,7 @@ export default function SignInPage() {
           .then(resposta => {
             
             const { id, userName, token, image} = resposta.data
-            setUser({ id, userName, token, image, id })
+            setUser({ id, userName, token, image})
             localStorage.setItem('user', JSON.stringify({ id, userName, token, image }))
             navigate('/timeline')
           })
