@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import NavBar from "../../components/NavBar"
 import PostCard from "../../components/PostCard";
 import styled from "styled-components";
-import { getPosts, newPost } from "../../Services/api";
+import { getPosts, newPost, getFolloweds } from "../../Services/api";
 import Trending from "../../components/Trending";
 import { ThreeDots } from "react-loader-spinner"
 import { useAllContexts } from "../../hooks/useAllContexts";
@@ -13,16 +13,31 @@ export default function HomePage() {
 
     const [link, setLink] = useState('')
     const [description, setDescription] = useState('')
+    const [haveFollowed, setHaveFollowed] = useState(false)
     const [loading, setLoading] = useState(false)
     const [loadingPost, setLoadingPost] = useState(false)
+
+    
+            
 
     
 
     useEffect(() => {
         function fetchData() {
+            getFolloweds(user.token)
+            .then(answer => {
+                if (answer.data.length > 0) {
+                    
+                    setHaveFollowed(true)
+                    
+                }
+            })
+            .catch(error => alert("An error occured while trying to fetch the posts, please refresh the page"));
+
             getPosts(user.token)
                 .then(answer => {
                     setAllPosts(answer.data);
+                    console.log(answer.data)
                     setLoadingPost(false)
                 })
                 .catch(error => alert("An error occured while trying to fetch the posts, please refresh the page"));
@@ -99,8 +114,8 @@ export default function HomePage() {
                                 </Right>
                             </NewPostContainer>
 
-                        {allPosts == undefined ? (
-                            <p data-test="message" >Ainda Não Existe serviço disponível</p>
+                        {!haveFollowed ? <TitleSC2>You don't follow anyone yet. Search for new friends!</TitleSC2> : allPosts.length == 0 ? (
+                            <TitleSC2 >No posts found from your friends</TitleSC2>
                         ) : (
                             allPosts.map(post => (<PostCard key={post.id} post={post} />))
                         )}
@@ -112,6 +127,21 @@ export default function HomePage() {
         </>
     )
 }
+
+const TitleSC2 = styled.div`
+    color: #FFF;
+    font-family: Oswald, monospace;
+    font-size: 43px;
+    padding-top: 80px;
+    font-style: normal;
+    font-weight: 700;
+    text-align: center;
+
+    @media (max-width: 768px) {
+        
+        font-size: 33px;
+    }
+`;
 
 const LoadingContainer = styled.div`
     display: flex;
