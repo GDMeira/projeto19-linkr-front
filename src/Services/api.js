@@ -37,6 +37,18 @@ export function searchUser(search, token) {
   return promise
 }
 
+export function postEdit(description, postId, token) {
+  const config = createConfig(token);
+  const promise = axios.put(`${BASE_URL}/posts/${postId}`, {description}, config)
+  return promise
+}
+
+export function postDelete(postId, token) {
+  const config = createConfig(token);
+  const promise = axios.delete(`${BASE_URL}/posts/${postId}`, config)
+  return promise
+}
+
 export function followUser(id, token) {
   const config = createConfig(token);
   const promise = axios.post(`${BASE_URL}/users/${id}/follow`, {}, config)
@@ -58,4 +70,8 @@ export function getFolloweds(token) {
   const config = createConfig(token);
   const promise = axios.get(`${BASE_URL}/followeds`, config)
   return promise
+}
+
+export function postComment(token, postId, comment) {
+  return axios.post(`${BASE_URL}/comments/${postId}`, {comment}, createConfig(token))
 }

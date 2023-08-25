@@ -88,9 +88,8 @@ const HeaderUp = styled.div`
 
 `;
 
-const Logo = styled.div`
-    width: 108px;
-    height: 54px;
+const Logo = styled.h1`
+    height: 100%;
     font-weight: 700;
     font-size: 50px;
     cursor: pointer;
@@ -106,6 +105,7 @@ const Picture = styled.div`
     justify-content: center;
     align-items: center;
     img{
+    cursor: pointer;
     width: 53px;
     height: 53px;
     border-radius: 50%;

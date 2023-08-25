@@ -7,15 +7,17 @@ import { getPosts, newPost, getFolloweds } from "../../Services/api";
 import Trending from "../../components/Trending";
 import { ThreeDots } from "react-loader-spinner"
 import { useAllContexts } from "../../hooks/useAllContexts";
+import { navigate } from "ionicons/icons";
+import { useNavigate } from "react-router-dom";
 
 export default function HomePage() {
     const { user, allPosts, setAllPosts } = useAllContexts()
-
     const [link, setLink] = useState('')
     const [description, setDescription] = useState('')
     const [haveFollowed, setHaveFollowed] = useState(false)
     const [loading, setLoading] = useState(false)
     const [loadingPost, setLoadingPost] = useState(false)
+    const navigate = useNavigate();
 
     
             
@@ -40,7 +42,14 @@ export default function HomePage() {
                     console.log(answer.data)
                     setLoadingPost(false)
                 })
-                .catch(error => alert("An error occured while trying to fetch the posts, please refresh the page"));
+                .catch(error => {
+                    if (error.response.status === 401) {
+                        localStorage.clear();
+                        navigate('/');
+                        return;
+                    }
+                    alert("An error occured while trying to fetch the posts, please refresh the page")
+                });
         };
 
         if (!allPosts) setLoadingPost(true);
@@ -67,7 +76,6 @@ export default function HomePage() {
             setAllPosts(answer.data);
             setLoading(false)
         } catch (error) {
-            console.error(error);
             alert("An error occured while trying to fetch the posts, please refresh the page")
             setLoading(false)
         }
@@ -158,7 +166,7 @@ const LoadingContainer = styled.div`
 
 
 const Left = styled.div`
-    margin: 20px 30px;
+    margin: 20px 0 0 25px;
     width: 3.5vw;
     img {
         width: 3.5vw;
@@ -172,11 +180,10 @@ const Left = styled.div`
 
 const Right = styled.div`
     width: 37vw;
-    height: 16vh;
     margin-top: 2vh;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-evenly;
 
     @media (max-width: 768px) {
     width: 90vw;
@@ -223,14 +230,13 @@ const Right = styled.div`
         cursor: pointer;
         width: 112px;
         height: 45px;
-        padding: 12px;
     }
 `
 
 const NewPostContainer = styled.div`
     background: #FFFFFF;
     width: 100%;
-    height: 209px;
+    height: 27vh;
     border-radius: 16px;
     display: flex;
     justify-content: space-evenly;

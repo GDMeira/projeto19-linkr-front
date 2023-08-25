@@ -10,6 +10,7 @@ import PostsContext from "./contexts/PostsContext";
 import UserPage from "./pages/UserPage/UserPage";
 
 
+
 function App() {
   const [user, setUser] = useState(localStorage.user ? JSON.parse(localStorage.user) : undefined);
   const [trending, setTrending] = useState(undefined);
@@ -20,15 +21,15 @@ function App() {
       <BrowserRouter>
         <UserContext.Provider value={{ user, setUser }}>
           <PostsContext.Provider value={{ trending, setTrending, allPosts, setAllPosts }}>
-            <Routes>
-              <Route path="/" element={<SignInPage />} />
-              <Route path='/timeline' element={<HomePage />} />
-              <Route path="/sign-up" element={<SignUpPage />} />
-              <Route path="/hashtag/:hashtag" element={<HashtagPage />} />
-              <Route path="/user/:id" element={<UserPage />} />
+              <Routes>
+                <Route path="/" element={<SignInPage />} />
+                <Route path='/timeline' element={<HomePage />} />
+                <Route path="/sign-up" element={<SignUpPage />} />
+                <Route path="/hashtag/:hashtag" element={<HashtagPage />} />
+                <Route path="/user/:id" element={<UserPage />} />
 
 
-            </Routes>
+              </Routes>
           </PostsContext.Provider>
         </UserContext.Provider>
       </BrowserRouter>

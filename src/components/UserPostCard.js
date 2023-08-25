@@ -1,22 +1,83 @@
 import styled from "styled-components";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import PostText from "./PostText";
 import Likes from "./Likes";
+import { Link } from "react-router-dom";
+import { trashOutline, pencilOutline } from "ionicons/icons";
+import { IonIcon } from '@ionic/react';
 import { useNavigate } from "react-router-dom";
-import CommentsNumber from "./CommentsNumber";
+import {
+    Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, FormControl, FormLabel, FormHelperText,
+    Input, Button, useDisclosure,
+} from "@chakra-ui/react"
+import UserContext from "../contexts/UserContext";
+import { postEdit, postDelete } from "../Services/api";
 import CommentsText from "./CommentsText";
+import CommentsNumber from "./CommentsNumber";
 
 
 
-export default function PostCard({ post }) {
+
+export default function UserPostCard({ post }) {
     let { id, url, userId, linkTitle, linkDescription, linkImage, postDescription, pictureUrl, userName, likers, comments } = post
+    const { user } = useContext(UserContext)
+    const [description, setDescription] = useState(postDescription)
+    const [editing, setEditing] = useState(false)
+    const [focusRef, setFocusRef] = useState(null);
     const [showComments, setShowComments] = useState(false);
+    //console.log(post)
 
     if (!linkImage) linkImage = "https://lightwidget.com/wp-content/uploads/localhost-file-not-found.jpg";
+
+    useEffect(() => {
+        if (!focusRef) return;
+
+
+        focusRef.focus();
+    }, [focusRef]);
 
     function goToUrl(link) {
         return window.open(link)
         //return window.location.href = link;
+    }
+
+    function edit() {
+        editing ? setEditing(false) : setEditing(true)
+    }
+    function editPost(e) {
+        e.preventDefault();
+        console.log(id, user)
+        console.log(description)
+
+        const promise = postEdit(description, id, user.token);
+        promise.then(answer => {
+            setEditing(false)
+        })
+        promise.catch(error => {
+            alert("An error occured while trying to edit the post, please try again");
+            setEditing(true)
+            setDescription(description)
+        })
+    };
+
+    function handleKeyDown(e) {
+        if (e.keyCode === 27) {
+            console.log('You pressed the escape key!')
+            setEditing(false)
+        }
+    }
+
+
+    function deletePost() {
+        onClose();
+        const promise = postDelete(id, user.token);
+        promise.then(answer => {
+
+        });
+        promise.catch(error => {
+            alert("An error occured while trying to delete the post, please try again");
+        })
+
     }
 
     const navigate = useNavigate();
@@ -25,8 +86,24 @@ export default function PostCard({ post }) {
         navigate(`/user/${userId}`);
     };
 
+
+    const { isOpen, onOpen, onClose } = useDisclosure()
+
+
     return (
         <>
+            <Modal isOpen={isOpen} onClose={onClose}>
+                <ModalOverlay >
+                    <ModalContent background="black">
+                        <ModalHeader color="white">Are you sure you want to delete this post?</ModalHeader>
+                        <ModalFooter>
+                            <Button color="blue" background="white" mr={3} onClick={onClose}>No, go back</Button>
+                            <Button colorScheme="blue" onClick={deletePost}>Yes, delete it</Button>
+                        </ModalFooter>
+                    </ModalContent>
+                </ModalOverlay>
+            </Modal>
+
             <ListServiceContainer data-test="post">
                 <Left>
                     <img onClick={goToUserPage} src={pictureUrl} alt="foto do criador" />
@@ -34,8 +111,19 @@ export default function PostCard({ post }) {
                     <CommentsNumber comments={comments} postId={id} setShowComments={setShowComments} />
                 </Left>
                 <Right>
-                    <h1 onClick={goToUserPage} data-test="username"><strong>{userName}</strong></h1>
-                    <PostText>{postDescription}</PostText>
+                    <PostController>
+                        <h1 onClick={goToUserPage} data-test="username"><strong>{userName}</strong></h1>
+                        <EditDelete>
+                            <IonIcon onClick={edit} icon={pencilOutline} style={{ fontSize: '20px', color: 'white', backgroundColor: '#151515' }} />
+                            <IonIcon onClick={onOpen} icon={trashOutline} style={{ fontSize: '20px', color: 'white', backgroundColor: '#151515' }} />
+                        </EditDelete>
+                    </PostController>
+
+                    <PostText>{editing ? (<form onSubmit={editPost}>
+                        <input placeholder={description} ref={setFocusRef} onKeyDown={handleKeyDown}
+                            data-test="edit-input" type="text" value={description}
+                            onChange={(e) => setDescription(e.target.value)} />
+                    </form>) : postDescription}</PostText>
                     <Linkr data-test="link" onClick={() => goToUrl(url)}>
                         <Info >
                             <h3>{linkTitle}</h3>
@@ -50,6 +138,16 @@ export default function PostCard({ post }) {
         </>
     )
 }
+const EditDelete = styled.div`
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+`
+
+const PostController = styled.div`
+    display: flex;
+    justify-content: space-between;
+`
 
 const Info = styled.div`
     display: flex;
@@ -82,22 +180,19 @@ const Left = styled.div`
         height: 3.5vw;
         border-radius: 50%;
     }
-
     @media (max-width: 768px) {
-        width: 10vw;
-        img {
-            width: 5vh;
-            height: 5vh;
-            gap: 5px;
-            padding-top: 5px;
-        }
-    }
+    width: 10vw;
+    img {
+    width: 5vh;
+    height: 5vh;
+}
+}
 `
 
 const Right = styled.div`
-    padding-right: 20px;
+        padding-right: 20px;
     width: 37vw;
-    height: 23vh;
+    height: 25vh;
     margin: 2vh 0;
     display: flex;
     flex-direction: column;
@@ -136,7 +231,6 @@ const Linkr = styled.div`
     height: 16vh;
     border: 1px solid #4D4D4D;
     border-radius: 16px;
-    margin-top: 5px;
     display: flex;
     justify-content: space-between;
     cursor: pointer;
@@ -194,7 +288,6 @@ const Linkr = styled.div`
 `
 
 const ListServiceContainer = styled.div`
-    z-index: 1;
     width: 100%;
     height: 27vh;
     top: 470px;
