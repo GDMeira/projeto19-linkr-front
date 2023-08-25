@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import NavBar from "../../components/NavBar"
 import PostCard from "../../components/PostCard";
 import styled from "styled-components";
-import { getPosts, newPost, getFolloweds } from "../../Services/api";
+import { getPosts, newPost, getFolloweds, getTrendings } from "../../Services/api";
 import Trending from "../../components/Trending";
 import { ThreeDots } from "react-loader-spinner"
 import { useAllContexts } from "../../hooks/useAllContexts";
@@ -11,7 +11,7 @@ import { navigate } from "ionicons/icons";
 import { useNavigate } from "react-router-dom";
 
 export default function HomePage() {
-    const { user, allPosts, setAllPosts } = useAllContexts()
+    const { user, allPosts, setAllPosts, setTrending } = useAllContexts()
     const [link, setLink] = useState('')
     const [description, setDescription] = useState('')
     const [haveFollowed, setHaveFollowed] = useState(false)
@@ -69,7 +69,7 @@ export default function HomePage() {
 
         try {
             await newPost({ link, postDescription: description }, user.token);
-            console.log('aoba')
+            getTrendings(user.token, setTrending);
             setLink('');
             setDescription('');
             const answer = await getPosts(user.token);
