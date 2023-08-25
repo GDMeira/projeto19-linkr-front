@@ -8,26 +8,29 @@ import { useNavigate } from "react-router-dom";
 import {Modal,ModalOverlay,ModalContent,ModalHeader,ModalFooter, Button, useDisclosure,} from "@chakra-ui/react"
 import UserContext from "../contexts/UserContext";
 import { postEdit, postDelete } from "../Services/api";
+import CommentsText from "./CommentsText";
+import CommentsNumber from "./CommentsNumber";
 
 
 
 
 export default function UserPostCard({ post }) {
-    let {id, url, userId, linkTitle, linkDescription, linkImage, postDescription, pictureUrl, userName, likers } = post
+    let { id, url, userId, linkTitle, linkDescription, linkImage, postDescription, pictureUrl, userName, likers, comments } = post
     const { user } = useContext(UserContext)
     const [description, setDescription] = useState(postDescription)
     const [editing, setEditing] = useState(false)
     const [focusRef, setFocusRef] = useState(null);
+    const [showComments, setShowComments] = useState(false);
     //console.log(post)
-    
-    if(!linkImage) linkImage = "https://lightwidget.com/wp-content/uploads/localhost-file-not-found.jpg";
+
+    if (!linkImage) linkImage = "https://lightwidget.com/wp-content/uploads/localhost-file-not-found.jpg";
 
     useEffect(() => {
-        if(!focusRef) return;
-        
+        if (!focusRef) return;
+
 
         focusRef.focus();
-      }, [focusRef]);
+    }, [focusRef]);
 
     function goToUrl(link) {
         return window.open(link)
@@ -41,8 +44,8 @@ export default function UserPostCard({ post }) {
         e.preventDefault();
         console.log(id, user)
         console.log(description)
-        
-        const promise = postEdit(description, id ,user.token);
+
+        const promise = postEdit(description, id, user.token);
         promise.then(answer => {
             setEditing(false)
         })
@@ -54,23 +57,23 @@ export default function UserPostCard({ post }) {
     };
 
     function handleKeyDown(e) {
-    if (e.keyCode === 27) {
-      console.log('You pressed the escape key!')
-      setEditing(false)
+        if (e.keyCode === 27) {
+            console.log('You pressed the escape key!')
+            setEditing(false)
+        }
     }
-  }
 
 
     function deletePost() {
         onClose();
         const promise = postDelete(id, user.token);
-        promise.then( answer => {
+        promise.then(answer => {
 
         });
         promise.catch(error => {
             alert("An error occured while trying to delete the post, please try again");
         })
-        
+
     }
 
     const navigate = useNavigate();
@@ -80,7 +83,7 @@ export default function UserPostCard({ post }) {
     };
 
 
-        const { isOpen, onOpen, onClose } = useDisclosure()
+    const { isOpen, onOpen, onClose } = useDisclosure()
 
 
     return (
@@ -88,44 +91,46 @@ export default function UserPostCard({ post }) {
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay >
                     <ModalContent background="black">
-                    <ModalHeader color="white">Are you sure you want to delete this post?</ModalHeader>      
-                    <ModalFooter>
-                        <Button color="blue" background="white" mr={3} onClick={onClose}>No, go back</Button>
-                        <Button colorScheme="blue" onClick={deletePost}>Yes, delete it</Button>
-                    </ModalFooter>
+                        <ModalHeader color="white">Are you sure you want to delete this post?</ModalHeader>
+                        <ModalFooter>
+                            <Button color="blue" background="white" mr={3} onClick={onClose}>No, go back</Button>
+                            <Button colorScheme="blue" onClick={deletePost}>Yes, delete it</Button>
+                        </ModalFooter>
                     </ModalContent>
                 </ModalOverlay>
             </Modal>
 
-        <ListServiceContainer data-test="post">
-            <Left>
-             <img onClick={goToUserPage} src={pictureUrl} alt="foto do criador" /> 
-                <Likes likers={likers} postId={id}/>
-            </Left>
-            <Right>
-                <PostController>
-                    <h1 onClick={goToUserPage} data-test="username"><strong>{userName}</strong></h1> 
-                    <EditDelete>
-                    <IonIcon onClick={edit} icon={pencilOutline} style={{ fontSize: '20px', color: 'white', backgroundColor: '#151515' }} />
-                    <IonIcon onClick={onOpen} icon={trashOutline} style={{ fontSize: '20px', color: 'white', backgroundColor: '#151515' }} />
-                    </EditDelete>
-                </PostController>
-               
-                <PostText>{editing ? (<form onSubmit={editPost}>
-                    <input placeholder={description} ref={setFocusRef} onKeyDown={handleKeyDown} 
-                    data-test="edit-input" type="text" value={description} 
-                    onChange={(e) => setDescription(e.target.value)} />
-                                </form>) : postDescription}</PostText>
-                <Linkr data-test="link" onClick={() => goToUrl(url)}>
-                    <Info >
-                        <h3>{linkTitle}</h3>
-                        <h4>{linkDescription}</h4>
-                        <h5>{url}</h5>
-                    </Info>
-                    <Image src={linkImage} alt="link" />
-                </Linkr>
-            </Right>
-        </ListServiceContainer>
+            <ListServiceContainer data-test="post">
+                <Left>
+                    <img onClick={goToUserPage} src={pictureUrl} alt="foto do criador" />
+                    <Likes likers={likers} postId={id} />
+                    <CommentsNumber comments={comments} postId={id} setShowComments={setShowComments} />
+                </Left>
+                <Right>
+                    <PostController>
+                        <h1 onClick={goToUserPage} data-test="username"><strong>{userName}</strong></h1>
+                        <EditDelete>
+                            <IonIcon onClick={edit} icon={pencilOutline} style={{ fontSize: '20px', color: 'white', backgroundColor: '#151515' }} />
+                            <IonIcon onClick={onOpen} icon={trashOutline} style={{ fontSize: '20px', color: 'white', backgroundColor: '#151515' }} />
+                        </EditDelete>
+                    </PostController>
+
+                    <PostText>{editing ? (<form onSubmit={editPost}>
+                        <input placeholder={description} ref={setFocusRef} onKeyDown={handleKeyDown}
+                            data-test="edit-input" type="text" value={description}
+                            onChange={(e) => setDescription(e.target.value)} />
+                    </form>) : postDescription}</PostText>
+                    <Linkr data-test="link" onClick={() => goToUrl(url)}>
+                        <Info >
+                            <h3>{linkTitle}</h3>
+                            <h4>{linkDescription}</h4>
+                            <h5>{url}</h5>
+                        </Info>
+                        <Image src={linkImage} alt="link" />
+                    </Linkr>
+                </Right>
+            </ListServiceContainer>
+            {showComments && <CommentsText post={post} />}
         </>
     )
 }
@@ -156,15 +161,15 @@ const Image = styled.img`
 `
 
 const Left = styled.div`
-    margin: 0 30px;
-    padding-top: 20px;
-    width: 3.5vw;
+    margin: 0 10px;
+    padding-top: 10px;
+    width: 6vw;
     height: 100%;
     display: flex;
     flex-direction: column;
     gap: 15px;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: space-evenly;
 
     img {
         width: 3.5vw;

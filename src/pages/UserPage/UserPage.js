@@ -210,6 +210,7 @@ const TitleSC = styled.div`
 const TitleSC2 = styled.div`
     color: #FFF;
     font-family: Oswald, monospace;
+    padding-top: 60px;
     font-size: 43px;
     font-style: normal;
     font-weight: 700;

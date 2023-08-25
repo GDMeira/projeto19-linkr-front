@@ -1,6 +1,6 @@
 import styled from "styled-components"
 import { Link, useNavigate } from "react-router-dom"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import axios from "axios"
 import { useContext } from "react"
 import { API_URL } from "../../routes/routes"
@@ -12,7 +12,13 @@ export default function SignInPage() {
   const [senhaLogin, setSenhaLogin] = useState('')
   const [btn, setBtn] = useState(false)
   const navigate = useNavigate()
-  const { setUser } = useContext(UserContext)
+  const { user, setUser } = useContext(UserContext)
+
+  useEffect(() => {
+    if (user?.token) {
+      navigate('/timeline')
+    }
+  })
 
   function login(event) {
     event.preventDefault()
@@ -42,7 +48,6 @@ export default function SignInPage() {
       }
     }
 
-
   return (
 
     <Container>
@@ -60,19 +65,29 @@ export default function SignInPage() {
 
       <RightSideContainer>
         <form onSubmit={login}>
-          
+
           <input data-test="email" placeholder="E-mail" type="email" value={emailLogin} autoComplete="email" onChange={e => setEmailLogin(e.target.value)} />
           <input data-test="password" placeholder="Senha" required type="password" autoComplete="password" value={senhaLogin} onChange={e => setSenhaLogin(e.target.value)} />
-          <Mybutton data-test="login-btn" disabled={btn} style={{opacity: btn ? '.5' : '1'}}>Log In</Mybutton>
+          <button data-test="login-btn" disabled={btn} style={{ opacity: btn ? '.5' : '1' }}>Log In</button>
         </form>
 
-          <Link to={'/sign-up'} data-test="sign-up-link">
-            First time? Create an account! 
-          </Link>
-        </RightSideContainer>
+        <LinkSC to={'/sign-up'} data-test="sign-up-link">
+          First time? Create an account!
+        </LinkSC>
+      </RightSideContainer>
     </Container>
   )
 }
+
+const LinkSC = styled(Link)`
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 18px;
+  color: white;
+  text-decoration: none;
+  padding-top: 30px;
+`
+
 const Container = styled.div`
     display:flex;
     height: 100vh;
@@ -121,7 +136,8 @@ const ContainerLeft = styled.section`
 `
 
 const RightSideContainer = styled.section`
-  width: 30%;
+  &&& {
+    width: 30%;
   display: flex;
   box-sizing: border-box;
   flex-direction: column;
@@ -133,6 +149,16 @@ const RightSideContainer = styled.section`
   }
   button{
     width:80%;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    background-color:#1977f2;
+    font-size: 20px;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    padding: 12px;
+  }
   }
   
 `

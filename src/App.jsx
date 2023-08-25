@@ -8,7 +8,6 @@ import { useState } from "react";
 import UserContext from "./contexts/UserContext";
 import PostsContext from "./contexts/PostsContext";
 import UserPage from "./pages/UserPage/UserPage";
-import { ChakraProvider } from "@chakra-ui/react";
 
 
 
@@ -22,7 +21,6 @@ function App() {
       <BrowserRouter>
         <UserContext.Provider value={{ user, setUser }}>
           <PostsContext.Provider value={{ trending, setTrending, allPosts, setAllPosts }}>
-            <ChakraProvider>
               <Routes>
                 <Route path="/" element={<SignInPage />} />
                 <Route path='/timeline' element={<HomePage />} />
@@ -32,7 +30,6 @@ function App() {
 
 
               </Routes>
-            </ChakraProvider>
           </PostsContext.Provider>
         </UserContext.Provider>
       </BrowserRouter>

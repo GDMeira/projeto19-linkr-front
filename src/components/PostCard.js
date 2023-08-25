@@ -1,16 +1,18 @@
 import styled from "styled-components";
-import React from "react";
+import React, { useState } from "react";
 import PostText from "./PostText";
 import Likes from "./Likes";
 import { useNavigate } from "react-router-dom";
+import CommentsNumber from "./CommentsNumber";
+import CommentsText from "./CommentsText";
 
 
 
 export default function PostCard({ post }) {
-    let {id, url, userId, linkTitle, linkDescription, linkImage, postDescription, pictureUrl, userName, likers } = post
+    let { id, url, userId, linkTitle, linkDescription, linkImage, postDescription, pictureUrl, userName, likers, comments } = post
+    const [showComments, setShowComments] = useState(false);
 
-    
-    if(!linkImage) linkImage = "https://lightwidget.com/wp-content/uploads/localhost-file-not-found.jpg";
+    if (!linkImage) linkImage = "https://lightwidget.com/wp-content/uploads/localhost-file-not-found.jpg";
 
     function goToUrl(link) {
         return window.open(link)
@@ -24,24 +26,28 @@ export default function PostCard({ post }) {
     };
 
     return (
-        <ListServiceContainer data-test="post">
-            <Left>
-             <img onClick={goToUserPage} src={pictureUrl} alt="foto do criador" /> 
-                <Likes likers={likers} postId={id}/>
-            </Left>
-            <Right>
-               <h1 onClick={goToUserPage} data-test="username"><strong>{userName}</strong></h1> 
-                <PostText>{postDescription}</PostText>
-                <Linkr data-test="link" onClick={() => goToUrl(url)}>
-                    <Info >
-                        <h3>{linkTitle}</h3>
-                        <h4>{linkDescription}</h4>
-                        <h5>{url}</h5>
-                    </Info>
-                    <Image src={linkImage} alt="link" />
-                </Linkr>
-            </Right>
-        </ListServiceContainer>
+        <>
+            <ListServiceContainer data-test="post">
+                <Left>
+                    <img onClick={goToUserPage} src={pictureUrl} alt="foto do criador" />
+                    <Likes likers={likers} postId={id} />
+                    <CommentsNumber comments={comments} postId={id} setShowComments={setShowComments} />
+                </Left>
+                <Right>
+                    <h1 onClick={goToUserPage} data-test="username"><strong>{userName}</strong></h1>
+                    <PostText>{postDescription}</PostText>
+                    <Linkr data-test="link" onClick={() => goToUrl(url)}>
+                        <Info >
+                            <h3>{linkTitle}</h3>
+                            <h4>{linkDescription}</h4>
+                            <h5>{url}</h5>
+                        </Info>
+                        <Image src={linkImage} alt="link" />
+                    </Linkr>
+                </Right>
+            </ListServiceContainer>
+            {showComments && <CommentsText post={post} />}
+        </>
     )
 }
 
@@ -61,32 +67,35 @@ const Image = styled.img`
 `
 
 const Left = styled.div`
-    margin: 0 30px;
-    padding-top: 20px;
-    width: 3.5vw;
+    margin: 0 10px;
+    padding-top: 10px;
+    width: 6vw;
     height: 100%;
     display: flex;
     flex-direction: column;
     gap: 15px;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: space-evenly;
 
     img {
         width: 3.5vw;
         height: 3.5vw;
         border-radius: 50%;
     }
+
     @media (max-width: 768px) {
-    width: 10vw;
-    img {
-    width: 5vh;
-    height: 5vh;
-}
-}
+        width: 10vw;
+        img {
+            width: 5vh;
+            height: 5vh;
+            gap: 5px;
+            padding-top: 5px;
+        }
+    }
 `
 
 const Right = styled.div`
-        padding-right: 20px;
+    padding-right: 20px;
     width: 37vw;
     height: 23vh;
     margin: 2vh 0;
@@ -185,6 +194,7 @@ const Linkr = styled.div`
 `
 
 const ListServiceContainer = styled.div`
+    z-index: 1;
     width: 100%;
     height: 27vh;
     top: 470px;

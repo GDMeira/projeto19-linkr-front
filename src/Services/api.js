@@ -65,3 +65,13 @@ export function getTrendings(token, setTrending) {
       console.log(err);
     });
 }
+
+export function getFolloweds(token) {
+  const config = createConfig(token);
+  const promise = axios.get(`${BASE_URL}/followeds`, config)
+  return promise
+}
+
+export function postComment(token, postId, comment) {
+  return axios.post(`${BASE_URL}/comments/${postId}`, {comment}, createConfig(token))
+}

@@ -75,15 +75,24 @@ export default function SignUpPage() {
     
         </form>
 
-        <Link to={'/'} data-test="login-link">
+        <LinkSC to={'/'} data-test="login-link">
             Switch back to log in
-        </Link>
+        </LinkSC>
         </RightSideContainer>
 
        
     </Container>
   )
 }
+
+const LinkSC = styled(Link)`
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 18px;
+  color: white;
+  text-decoration: none;
+  padding-top: 30px;
+`
 
 const Container = styled.div`
     display:flex;
@@ -145,6 +154,15 @@ const RightSideContainer = styled.section`
   }
   button{
     width:80%;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    background-color:#1977f2;
+    font-size: 20px;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    padding: 12px;
   }
   
 `
