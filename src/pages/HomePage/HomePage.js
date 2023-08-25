@@ -122,8 +122,8 @@ export default function HomePage() {
                                 </Right>
                             </NewPostContainer>
 
-                        {!haveFollowed ? <TitleSC2>You don't follow anyone yet. Search for new friends!</TitleSC2> : allPosts.length == 0 ? (
-                            <TitleSC2 >No posts found from your friends</TitleSC2>
+                        {!haveFollowed ? <TitleSC2 data-test='message'>You don't follow anyone yet. Search for new friends!</TitleSC2> : allPosts.length == 0 ? (
+                            <TitleSC2 data-test='message' >No posts found from your friends</TitleSC2>
                         ) : (
                             allPosts.map(post => (<PostCard key={post.id} post={post} />))
                         )}
